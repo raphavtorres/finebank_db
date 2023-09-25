@@ -126,7 +126,7 @@ class Account():
   
 
 class Investment():
-  account = models.ForeignKey(Account, on_delete=models.CASCADE)
+  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
   investment_type = models.CharField(max_length=50)
   contribution = models.FloatField()  # amount
   income = models.FloatField()
@@ -144,7 +144,7 @@ class Investment():
   
 
 class Loan():
-  account = models.OneToOneField(Account, on_delete=models.CASCADE)
+  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
   amount_request = models.FloatField()
   interest_rate = models.FloatField()
   is_payout = models.BooleanField()
@@ -162,7 +162,7 @@ class Loan():
 
 
 class Installment():
-  loan = models.OneToOneField(Loan, on_delete=models.CASCADE)
+  loan = models.ManyToOneRel(Loan, on_delete=models.CASCADE)
   number = models.CharField(max_length=8)
   payment_amount = models.FloatField()
   payment_date = models.DateField()
@@ -177,7 +177,7 @@ class Installment():
 
 
 class Card():
-  account = models.OneToOneField(Account, on_delete=models.CASCADE)
+  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
   number = models.CharField(max_length=16)
   verification_code = models.CharField(max_length=3)
   flag = models.CharField(max_length=20)
@@ -197,7 +197,7 @@ class Transaction():
     ('Credit', 'Credit'),
     ('Debit', 'Debit')
   )
-  card = models.OneToOneField(Card, on_delete=models.CASCADE)
+  card = models.ManyToOneRel(Card, on_delete=models.CASCADE)
   amount = models.FloatField()
   transaction_type = models.CharField(choices=OPTIONS)
   timestamp = models.DateTimeField()
