@@ -1,2 +1,9 @@
-venv
 .venv
+venv
+.env
+env
+
+**/__pycache__/
+
+# Database sql
+db.sqlite3

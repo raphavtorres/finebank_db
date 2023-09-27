@@ -1,67 +1,99 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth import get_user_model
 
 
 # CUSTOM USER MODELS
 class CustomUserManager(BaseUserManager):
   use_in_migrations = True
 
-  def _create_user(self):
-    ...
+  def _create_user(self, register_number, password, **extra_fields):
+    if not register_number:
+      raise ValueError('Register Number is required')
+    user = self.model(register_number=register_number, username=register_number, **extra_fields)
+    user.set_password(password)
+    user.save(using=self.db)
+    return user
 
-  def create_user(self):
-    ...
+  def create_user(self, register_number, password=None, **extra_fields):
+    extra_fields.setdefault('is_superuser', False)
+    return self._create_user(register_number, password, **extra_fields)
 
-  def create_superuser(self):
-    ...
+  def create_superuser(self, register_number, password, **extra_fields):
+    extra_fields.setdefault('is_superuser', True)
+    extra_fields.setdefault('is_staff', True)
+
+    if extra_fields.get('is_superuser') is not True:
+      raise ValueError('Superuser needs the is_superuser=True')
+    
+    if extra_fields.get('is_staff') is not True:
+      raise ValueError('Superuser needs the is_staff=True')
+    
+    return self._create_user(register_number, password, **extra_fields)
+
+
+#BASE
+class Base(models.Model):
+  created = models.DateTimeField(auto_now_add=True)
+  modified = models.DateTimeField(auto_now=True)
+  active = models.BooleanField(default=True)
+
+  class Meta:
+    abstract = True
 
 
 # USER
-class Client(AbstractUser):
-  register_number = models.CharField()
-  # password = models.CharField()
-  picture = models.ImageField()
+class Customer(AbstractUser):
+  register_number = models.CharField(unique=True, primary_key=True, max_length=25)
+  picture = models.CharField(max_length=255)
+  # picture = models.ImageField()
+  is_staff = models.BooleanField(default=False)
+
+  USERNAME_FIELD = 'register_number'
+  REQUIRED_FIELDS = ['first_name', 'last_name']
 
   def __str__(self):
-    return self.register_number
+    return f'{self.register_number}'
+  
+  objects = CustomUserManager()
 
 
-class NaturalPerson():
-  client = models.OneToOneField(Client, on_delete=models.CASCADE)
-  name = models.CharField()
+class NaturalPerson(Base):
+  customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+  name = models.CharField(max_length=50)
   birthdate = models.DateField()
-  cpf = models.CharField()
-  rg = models.CharField()
-  social_name = models.CharField()
+  cpf = models.CharField(max_length=11)
+  rg = models.CharField(max_length=9)
+  social_name = models.CharField(max_length=50)
 
   class Meta:
     verbose_name = 'Natural Person'
     verbose_name_plural = 'Natural People'
 
   def __str__(self):
-    return self.name
+    return f'{self.name}'
 
 
-class LegalPerson():
-  client = models.OneToOneField(Client, on_delete=models.CASCADE)
-  fantasy_name = models.CharField()
+class LegalPerson(Base):
+  customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+  fantasy_name = models.CharField(max_length=50)
   establishment_date = models.DateField()
-  cnpj = models.CharField()
-  im = models.CharField()  # inscrição municipal
-  ie = models.CharField()  # inscrição estadual
-  legal_nature = models.CharField()
+  cnpj = models.CharField(max_length=14)
+  im = models.CharField(max_length=25)  # inscrição municipal
+  ie = models.CharField(max_length=25)  # inscrição estadual
+  legal_nature = models.CharField(max_length=50)
 
   class Meta:
     verbose_name = 'Legal Person'
     verbose_name_plural = 'Legal People'
 
   def __str__(self):
-    return self.fantasy_name
+    return f'{self.fantasy_name}'
 
 
 # OTHER
-class Email():
-  client = models.OneToOneField(Client, on_delete=models.CASCADE, related_name='email_client')
+class Email(Base):
+  customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='email_customer')
   email = models.EmailField(null=True, blank=True)
 
   class Meta:
@@ -69,11 +101,11 @@ class Email():
     verbose_name_plural = 'Emails'
 
   def __str__(self):
-    return self.email
+    return f'{self.email}'
   
 
-class Phone():
-  client = models.OneToOneField(Client, on_delete=models.CASCADE)
+class Phone(Base):
+  customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
   phone = models.CharField(max_length=8)
   country_code = models.CharField(max_length=3)
   prefix_number = models.CharField(max_length=3)
@@ -83,11 +115,11 @@ class Phone():
     verbose_name_plural = 'Telephones'
 
   def __str__(self):
-    return self.phone
+    return f'{self.phone}'
 
 
-class Address():
-  client = models.OneToOneField(Client, on_delete=models.CASCADE)
+class Address(Base):
+  customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
   neighborhood = models.CharField(max_length=100)
   street = models.CharField(max_length=100)
   number = models.CharField(max_length=4)
@@ -100,33 +132,33 @@ class Address():
     verbose_name_plural = 'Addresses'
 
   def __str__(self):
-    return self.cep
+    return f'{self.cep}'
   
 
 # ACCOUNT
-class Account():
+class Account(Base):
   OPTIONS = (
     ('checking', 'checking'),
     ('savings ', 'savings ')
   )
 
-  client = models.ManyToManyField(Client)
+  customer = models.ManyToManyField(get_user_model())
   number = models.CharField(max_length=8)
   agency = models.CharField(max_length=8)
-  acc_type = models.CharField(choices=OPTIONS)
-  credit_limit = models.FloatField()
-  is_active = models.BooleanField()
+  acc_type = models.CharField(choices=OPTIONS, max_length=9)
+  credit_limit = models.DecimalField(max_digits=9, decimal_places=2)
+  is_active = models.BooleanField(default=True)
 
   class Meta:
     verbose_name = 'Account'
     verbose_name_plural = 'Accounts'
 
   def __str__(self):
-    return self.number
+    return f'{self.number}'
   
 
-class Investment():
-  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
+class Investment(Base):
+  id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
   investment_type = models.CharField(max_length=50)
   contribution = models.FloatField()  # amount
   income = models.FloatField()
@@ -140,11 +172,11 @@ class Investment():
     verbose_name_plural = 'Investments'
 
   def __str__(self):
-    return self.investment_type
+    return f'{self.investment_type}'
   
 
-class Loan():
-  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
+class Loan(Base):
+  id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
   amount_request = models.FloatField()
   interest_rate = models.FloatField()
   is_payout = models.BooleanField()
@@ -158,11 +190,11 @@ class Loan():
     verbose_name_plural = 'Loans'
 
   def __str__(self):
-    return self.amount_request
+    return f'{self.amount_request}'
 
 
-class Installment():
-  loan = models.ManyToOneRel(Loan, on_delete=models.CASCADE)
+class Installment(Base):
+  loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
   number = models.CharField(max_length=8)
   payment_amount = models.FloatField()
   payment_date = models.DateField()
@@ -173,11 +205,11 @@ class Installment():
     verbose_name_plural = 'Installments'
 
   def __str__(self):
-    return self.number
+    return f'{self.number}'
 
 
-class Card():
-  account = models.ManyToOneRel(Account, on_delete=models.CASCADE)
+class Card(Base):
+  account = models.ForeignKey(Account, on_delete=models.CASCADE)
   number = models.CharField(max_length=16)
   verification_code = models.CharField(max_length=3)
   flag = models.CharField(max_length=20)
@@ -189,17 +221,17 @@ class Card():
     verbose_name_plural = 'Cards'
 
   def __str__(self):
-    return self.number
+    return f'{self.number}'
   
 
-class Transaction():
+class Transaction(Base):
   OPTIONS = (
     ('Credit', 'Credit'),
     ('Debit', 'Debit')
   )
-  card = models.ManyToOneRel(Card, on_delete=models.CASCADE)
+  card = models.ForeignKey(Card, on_delete=models.CASCADE)
   amount = models.FloatField()
-  transaction_type = models.CharField(choices=OPTIONS)
+  transaction_type = models.CharField(choices=OPTIONS, max_length=6)
   timestamp = models.DateTimeField()
 
   class Meta:
@@ -207,5 +239,5 @@ class Transaction():
     verbose_name_plural = 'Transactions'
 
   def __str__(self):
-    return self.transaction_type
+    return f'{self.transaction_type}'
   
