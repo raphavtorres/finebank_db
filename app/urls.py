@@ -13,7 +13,7 @@ from .views import (
     LoanViewSet,
     InstallmentViewSet,
     CardViewSet,
-    TransactioViewSet
+    TransactionViewSet
 )
 
 
@@ -28,7 +28,7 @@ router.register('investments', InvestmentViewSet)
 router.register('loans', LoanViewSet)
 router.register('installments', InstallmentViewSet)
 router.register('cards', CardViewSet)
-router.register('transactions', TransactioViewSet)
+router.register('transactions', TransactionViewSet)
 
 
 urlpatterns = []
