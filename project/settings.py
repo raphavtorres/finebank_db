@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,10 +29,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# API CORSHEADERS
+CORS_ALLOWED_ORIGINS = [
+    # 'http://localhost:5173',
+    # 'http://127.0.0.1:5173',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,13 +50,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_filters',
+    'django_extensions',
     'rest_framework',
     # 'rest_framework.authtoken'
 
     'app',
+
+    # API
+    'corsheaders',
+
+    # Djoser auth
+    'djoser',
+
 ]
 
 MIDDLEWARE = [
+    # API
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,20 +159,78 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.SessionAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication'
     ],
     'DEFAULT_PERMISSION_CLASSES': [
+        # ANONYMOUS - JUST READ
+        # AUTHENTICATED - ALL
+        # 'rest_framework.permissions.AllowAny'
+        # 'rest_framework.permissions.IsAuthenticated'
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 2,
     'DEFAULT_THROTTLE_CLASSES': [
+        # ANONYMOUS THROTTLE
         'rest_framework.throttling.AnonRateThrottle',
+        # AUTHENTICATED THROTTLE
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '50/minute',  # second, day, month, year
+        'anon': '20/minute',  # second, day, month, year
         'user': '100/minute'
     }
+}
+
+# JWT
+# https://djoser.readthedocs.io/en/latest/settings.html
+SIMPLE_JWT = {
+    # 'USER_ID_FIELD': 'edv',
+    'AUTH_HEADERS_TYPES': ['Bearer'],
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+}
+
+# ADMIN PAGE DESIGN
+JAZZMIN_SETTINGS = {
+    "site_title": "FineBank",
+    "welcome_sign": "Bem-Vindo(a)!",
+    "site_header": "FineBank",
+    "site_brand": "FineBank",
+    "copyright": "https://github.com/raphavtorres",
+    # "site_logo": "images/logo2.svg",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-teal",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-info",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "cyborg",
+    # "theme": "solar",
+    "dark_mode_theme": 'darkly',
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
 }
