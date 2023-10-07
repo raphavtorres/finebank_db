@@ -64,7 +64,7 @@ class NaturalPerson(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     birthdate = models.DateField()
-    cpf = models.CharField(max_length=11)
+    # cpf = models.CharField(max_length=11) "register number"
     rg = models.CharField(max_length=9)
     social_name = models.CharField(max_length=50)
 
@@ -80,7 +80,7 @@ class LegalPerson(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     fantasy_name = models.CharField(max_length=50)
     establishment_date = models.DateField()
-    cnpj = models.CharField(max_length=14)
+    # cnpj = models.CharField(max_length=14) "register number"
     im = models.CharField(max_length=25)  # inscrição municipal
     ie = models.CharField(max_length=25)  # inscrição estadual
     legal_nature = models.CharField(max_length=50)
@@ -140,6 +140,8 @@ class Address(Base):
 
 # ACCOUNT
 class Account(Base):
+    # corrente
+    # poupança
     OPTIONS = (
         ('checking', 'checking'),
         ('savings ', 'savings ')

@@ -51,7 +51,7 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
             'customer',
             'name',
             'birthdate',
-            'cpf',
+            # 'cpf',
             'rg',
             'social_name',
             'accounts'
@@ -69,7 +69,7 @@ class LegalPersonSerializer(serializers.ModelSerializer):
             'id',
             'fantasy_name',
             'establishment_date',
-            'cnpj',
+            # 'cnpj',
             'im',
             'ie',
             'legal_nature',
