@@ -1,21 +1,4 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-
-from .forms import CustomerCreateForm, CustomerChangeForm
-from .models import (
-    Customer,
-    NaturalPerson,
-    LegalPerson,
-    Email,
-    Phone,
-    Address,
-    Account,
-    Investment,
-    Loan,
-    Installment,
-    Card,
-    Transaction
-)
+from .imports.admin import *
 
 
 @admin.register(Customer)
@@ -39,7 +22,7 @@ class NaturalPersonAdmin(admin.ModelAdmin):
         'id',
         'name',
         'birthdate',
-        'cpf',
+        # 'cpf',
         'rg',
         'social_name'
     ]
@@ -51,7 +34,9 @@ class NaturalPersonAdmin(admin.ModelAdmin):
 @admin.register(LegalPerson)
 class LegalPersonAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer',
-                    'fantasy_name', 'establishment_date', 'cnpj', 'im', 'ie', 'legal_nature']
+                    'fantasy_name', 'establishment_date',
+                    # 'cnpj',
+                    'im', 'ie', 'legal_nature']
     ordering = ['id']
 
 
@@ -83,6 +68,13 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Investment)
 class InvestmentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'investment_type', 'contribution',
+                    'income', 'admin_fee', 'period', 'risc_rate', 'profitability']
+    ordering = ['id']
+
+
+@admin.register(AccountInvestment)
+class AccountInvestmentAdmin(admin.ModelAdmin):
     list_display = ['id', 'id_account', 'investment_type', 'contribution',
                     'income', 'admin_fee', 'period', 'risc_rate', 'profitability']
     ordering = ['id']

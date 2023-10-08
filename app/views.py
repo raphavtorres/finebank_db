@@ -1,54 +1,27 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-
-from .models import (
-    NaturalPerson,
-    LegalPerson,
-    Email,
-    Phone,
-    Address,
-    Account,
-    Investment,
-    Loan,
-    Installment,
-    Card,
-    Transaction,
-)
-
-from .serializers import (
-    NaturalPersonSerializer,
-    LegalPersonSerializer,
-    EmailSerializer,
-    PhoneSerializer,
-    AddressSerializer,
-    AccountSerializer,
-    InvestmentSerializer,
-    LoanSerializer,
-    InstallmentSerializer,
-    CardSerializer,
-    TransactionSerializer,
-)
-
-from .permissions import (
-    # SuperUserPermission,
-    # CustomerGetPermission,
-    # CustomerPostPermission,
-    CustomerGetPostPatch,
-    # DeletePermission,
-)
+from .imports.views import *
 
 
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     queryset = NaturalPerson.objects.all()
-    serializer_class = NaturalPersonSerializer
+    # serializer_class = NaturalPersonSerializer
 
     permission_classes = [CustomerGetPostPatch]
+
+    def get_serializer_class(self):
+        if self.request.method in "POST PATCH":
+            return NaturalPersonPostPatchSerializer
+        return NaturalPersonGetSerializer
 
 
 class LegalPersonViewSet(viewsets.ModelViewSet):
     queryset = LegalPerson.objects.all()
-    serializer_class = LegalPersonSerializer
+
     permission_classes = [CustomerGetPostPatch]
+
+    def get_serializer_class(self):
+        if self.request.method in "POST PATCH":
+            return LegalPersonPostPatchSerializer
+        return LegalPersonGetSerializer
 
 
 class EmailViewSet(viewsets.ModelViewSet):
@@ -82,6 +55,13 @@ class AccountViewSet(viewsets.ModelViewSet):
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentSerializer
+
+    permission_classes = [CustomerGetPermission]
+
+
+class AccountInvestmentViewSet(viewsets.ModelViewSet):
+    queryset = Investment.objects.all()
+    serializer_class = AccountInvestmentSerializer
 
     permission_classes = [CustomerGetPostPatch]
 

@@ -1,20 +1,4 @@
-from django.urls import path
-
-from rest_framework.routers import SimpleRouter
-
-from .views import (
-    NaturalPersonViewSet,
-    LegalPersonViewSet,
-    EmailViewSet,
-    PhoneViewSet,
-    AddressViewSet,
-    AccountViewSet,
-    InvestmentViewSet,
-    LoanViewSet,
-    InstallmentViewSet,
-    CardViewSet,
-    TransactionViewSet
-)
+from .imports.url import *
 
 
 router = SimpleRouter()

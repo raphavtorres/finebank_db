@@ -162,8 +162,8 @@ class Account(Base):
         return f'{self.number}'
 
 
+# INVESTMENT
 class Investment(Base):
-    id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
     investment_type = models.CharField(max_length=50)
     contribution = models.FloatField()  # amount
     income = models.FloatField()
@@ -175,6 +175,17 @@ class Investment(Base):
     class Meta:
         verbose_name = 'Investment'
         verbose_name_plural = 'Investments'
+
+    def __str__(self):
+        return f'{self.investment_type}'
+
+
+class AccountInvestment(Investment):
+    id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Account Investment'
+        verbose_name_plural = 'Account Investments'
 
     def __str__(self):
         return f'{self.investment_type}'

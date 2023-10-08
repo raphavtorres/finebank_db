@@ -1,21 +1,8 @@
-from rest_framework import serializers
-# from django.db.models import Avg
-
-from .models import (
-    NaturalPerson,
-    LegalPerson,
-    Email,
-    Phone,
-    Address,
-    Account,
-    Investment,
-    Loan,
-    Installment,
-    Card,
-    Transaction,
-)
+from .imports.serializers import *
 
 
+# ACCOUNT
+# GET
 class AccountSerializer(serializers.ModelSerializer):
 
     investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -31,7 +18,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'agency',
             'acc_type',
             'credit_limit',
-            'is_active',
+            # 'is_active',
             'customers',
             'investments',
             'loans',
@@ -39,6 +26,27 @@ class AccountSerializer(serializers.ModelSerializer):
         ]
 
 
+# POST AND PATCH
+class AccountPostPatchSerializer(serializers.ModelSerializer):
+
+    investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    loans = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    cards = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        # extra_kwargs = {}
+        model = Account
+        fields = [
+            'id',
+            'number',
+            'agency',
+            'acc_type',
+            'credit_limit',
+        ]
+
+
+# NATURAL PERSON
+# GET
 class NaturalPersonSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
@@ -48,6 +56,7 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
         model = NaturalPerson
         fields = [
             'id',
+            'register_number',
             'customer',
             'name',
             'birthdate',
@@ -58,15 +67,35 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
         ]
 
 
+# POST AND PATCH
+class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
+
+    accounts = AccountSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = NaturalPerson
+        fields = [
+            'register_number',
+            'customer',
+            'name',
+            'birthdate',
+            # 'cpf',
+            'rg',
+            'social_name',
+        ]
+
+
+# LEGAL PERSON
+# GET
 class LegalPersonSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
 
     class Meta:
-        # extra_kwargs = {}
         model = LegalPerson
         fields = [
             'id',
+            'register_number',
             'fantasy_name',
             'establishment_date',
             # 'cnpj',
@@ -77,10 +106,28 @@ class LegalPersonSerializer(serializers.ModelSerializer):
         ]
 
 
+# POST AND PATCH
+class LegalPersonPostPatchSerializer(serializers.ModelSerializer):
+
+    accounts = AccountSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = LegalPerson
+        fields = [
+            'register_number',
+            'fantasy_name',
+            'establishment_date',
+            # 'cnpj',
+            'im',
+            'ie',
+            'legal_nature',
+        ]
+
+
+# EMAIL
 class EmailSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Email
         fields = [
             'id',
@@ -89,10 +136,10 @@ class EmailSerializer(serializers.ModelSerializer):
         ]
 
 
+# PHONE
 class PhoneSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Phone
         fields = [
             'id',
@@ -103,10 +150,10 @@ class PhoneSerializer(serializers.ModelSerializer):
         ]
 
 
+# ADRESS
 class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Address
         fields = [
             'id',
@@ -120,13 +167,10 @@ class AddressSerializer(serializers.ModelSerializer):
         ]
 
 
-# ACCOUNT FICAVA AQUI
-
-
+# INVESTMENT
 class InvestmentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Investment
         fields = (
             'id',
@@ -140,13 +184,28 @@ class InvestmentSerializer(serializers.ModelSerializer):
         )
 
 
+class AccountInvestmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountInvestment
+        fields = (
+            'id',
+            'investment_type',
+            'contribution',
+            'income',
+            'admin_fee',
+            'period'
+            'risc_rate',
+            'profitability'
+        )
+
+
+# LOAN
 class LoanSerializer(serializers.ModelSerializer):
 
     installments = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True)
 
     class Meta:
-        # extra_kwargs = {}
         model = Loan
         fields = (
             'id',
@@ -160,10 +219,10 @@ class LoanSerializer(serializers.ModelSerializer):
         )
 
 
+# INSTALLMENT
 class InstallmentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Installment
         fields = (
             'id',
@@ -174,13 +233,13 @@ class InstallmentSerializer(serializers.ModelSerializer):
         )
 
 
+# CARD
 class CardSerializer(serializers.ModelSerializer):
 
     transactions = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True)
 
     class Meta:
-        # extra_kwargs = {}
         model = Card
         fields = (
             'id',
@@ -193,10 +252,10 @@ class CardSerializer(serializers.ModelSerializer):
         )
 
 
+# TRANSACTION
 class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # extra_kwargs = {}
         model = Transaction
         fields = (
             'id',
