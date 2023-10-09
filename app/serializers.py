@@ -47,7 +47,7 @@ class AccountPostPatchSerializer(serializers.ModelSerializer):
 
 # NATURAL PERSON
 # GET
-class NaturalPersonSerializer(serializers.ModelSerializer):
+class NaturalPersonGetSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
 
@@ -56,11 +56,10 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
         model = NaturalPerson
         fields = [
             'id',
-            'register_number',
+            'cpf',
             'customer',
             'name',
             'birthdate',
-            # 'cpf',
             'rg',
             'social_name',
             'accounts'
@@ -70,16 +69,15 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
 # POST AND PATCH
 class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
 
-    accounts = AccountSerializer(many=True, read_only=True)
+    password = serializers.CharField(max_length=30)
 
     class Meta:
         model = NaturalPerson
         fields = [
-            'register_number',
-            'customer',
+            'cpf',
+            'password'
             'name',
             'birthdate',
-            # 'cpf',
             'rg',
             'social_name',
         ]
@@ -87,7 +85,7 @@ class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
 
 # LEGAL PERSON
 # GET
-class LegalPersonSerializer(serializers.ModelSerializer):
+class LegalPersonGetSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
 
@@ -95,10 +93,9 @@ class LegalPersonSerializer(serializers.ModelSerializer):
         model = LegalPerson
         fields = [
             'id',
-            'register_number',
+            'cnpj',
             'fantasy_name',
             'establishment_date',
-            # 'cnpj',
             'im',
             'ie',
             'legal_nature',
@@ -109,15 +106,15 @@ class LegalPersonSerializer(serializers.ModelSerializer):
 # POST AND PATCH
 class LegalPersonPostPatchSerializer(serializers.ModelSerializer):
 
-    accounts = AccountSerializer(many=True, read_only=True)
+    password = serializers.CharField(max_length=30)
 
     class Meta:
         model = LegalPerson
         fields = [
-            'register_number',
+            'cnpj',
+            'password',
             'fantasy_name',
             'establishment_date',
-            # 'cnpj',
             'im',
             'ie',
             'legal_nature',

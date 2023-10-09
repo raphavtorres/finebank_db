@@ -3,8 +3,12 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from app.views import (
-    NaturalPersonViewSet,
-    LegalPersonViewSet,
+    NaturalPersonGetViewSet,
+    NaturalPersonPostViewSet,
+
+    LegalPersonGetViewSet,
+    LegalPersonPostViewSet,
+    
     EmailViewSet,
     PhoneViewSet,
     AddressViewSet,

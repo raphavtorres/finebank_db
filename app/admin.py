@@ -20,9 +20,10 @@ class CustomerAdmin(UserAdmin):
 class NaturalPersonAdmin(admin.ModelAdmin):
     list_display = [
         'id',
+        'customer',
         'name',
         'birthdate',
-        # 'cpf',
+        'cpf',
         'rg',
         'social_name'
     ]
@@ -35,8 +36,8 @@ class NaturalPersonAdmin(admin.ModelAdmin):
 class LegalPersonAdmin(admin.ModelAdmin):
     list_display = ['id', 'customer',
                     'fantasy_name', 'establishment_date',
-                    # 'cnpj',
-                    'im', 'ie', 'legal_nature']
+                    'cnpj', 'legal_nature',
+                    'im', 'ie']
     ordering = ['id']
 
 

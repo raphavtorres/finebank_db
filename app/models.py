@@ -79,11 +79,11 @@ class NaturalPerson(Base):
 class LegalPerson(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     fantasy_name = models.CharField(max_length=50)
+    legal_nature = models.CharField(max_length=50)
     establishment_date = models.DateField()
-    # cnpj = models.CharField(max_length=14) "register number"
+    cnpj = models.CharField(max_length=14)
     im = models.CharField(max_length=25)  # inscrição municipal
     ie = models.CharField(max_length=25)  # inscrição estadual
-    legal_nature = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = 'Legal Person'

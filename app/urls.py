@@ -2,8 +2,30 @@ from .imports.url import *
 
 
 router = SimpleRouter()
-router.register('natural-people', NaturalPersonViewSet)
-router.register('legal-people', LegalPersonViewSet)
+# NATURAL PERSON
+router.register(
+  'natural-people', 
+  NaturalPersonGetViewSet, 
+  basename='natural-people'
+)
+router.register(
+  'natural-people-create'
+  , NaturalPersonPostViewSet, 
+  basename='natural-people-create'
+)
+
+# LEGAL PERSON
+router.register(
+  'legal-people', 
+  LegalPersonGetViewSet,
+  basename='legal-people'
+)
+router.register(
+  'legal-people-create', 
+  LegalPersonPostViewSet,
+  basename='legal-people-create'
+)
+
 router.register('emails', EmailViewSet)
 router.register('phones', PhoneViewSet)
 router.register('addresses', AddressViewSet)

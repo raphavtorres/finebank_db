@@ -159,15 +159,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication'
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         # ANONYMOUS - JUST READ
         # AUTHENTICATED - ALL
-        # 'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.AllowAny'
         # 'rest_framework.permissions.IsAuthenticated'
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 2,
@@ -185,12 +185,12 @@ REST_FRAMEWORK = {
 
 # JWT
 # https://djoser.readthedocs.io/en/latest/settings.html
-SIMPLE_JWT = {
-    # 'USER_ID_FIELD': 'edv',
-    'AUTH_HEADERS_TYPES': ['Bearer'],
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
-}
+# SIMPLE_JWT = {
+#     # 'USER_ID_FIELD': 'edv',
+#     'AUTH_HEADERS_TYPES': ['Bearer'],
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+# }
 
 # ADMIN PAGE DESIGN
 JAZZMIN_SETTINGS = {
