@@ -64,7 +64,7 @@ class NaturalPerson(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     birthdate = models.DateField()
-    # cpf = models.CharField(max_length=11) "register number"
+    cpf = models.CharField(max_length=11)
     rg = models.CharField(max_length=9)
     social_name = models.CharField(max_length=50)
 

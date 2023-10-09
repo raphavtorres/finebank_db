@@ -10,7 +10,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method in "POST PATCH":
             return NaturalPersonPostPatchSerializer
-        return NaturalPersonGetSerializer
+        return NaturalPersonSerializer
 
 
 class LegalPersonViewSet(viewsets.ModelViewSet):
@@ -21,7 +21,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method in "POST PATCH":
             return LegalPersonPostPatchSerializer
-        return LegalPersonGetSerializer
+        return LegalPersonSerializer
 
 
 class EmailViewSet(viewsets.ModelViewSet):
