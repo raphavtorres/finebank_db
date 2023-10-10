@@ -6,7 +6,8 @@ class CustomerAdmin(UserAdmin):
     add_form = CustomerCreateForm
     form = CustomerChangeForm
     model = Customer
-    list_display = ('register_number', 'first_name', 'last_name', 'is_staff')
+    list_display = ('register_number', 'username',
+                    'first_name', 'last_name', 'is_staff')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal Information', {'fields': ('first_name', 'last_name')}),

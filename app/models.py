@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 
+from django.core.validators import MaxValueValidator
+
 
 # CUSTOM USER MODELS
 class CustomUserManager(BaseUserManager):
@@ -13,7 +15,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(register_number=register_number,
                           username=register_number, **extra_fields)
         user.set_password(password)
-        user.save(using=self.db)
+        user.save(using=self._db)
         return user
 
     def create_user(self, register_number, password=None, **extra_fields):
@@ -45,14 +47,16 @@ class Base(models.Model):
 
 # USER
 class Customer(AbstractUser):
-    register_number = models.CharField(
-        unique=True, primary_key=True, max_length=25)
+    register_number = models.IntegerField(
+        validators=[MaxValueValidator(999999999999999999999999)],
+        unique=True,
+        primary_key=True
+    )
     picture = models.CharField(max_length=255)
-    # picture = models.ImageField()
     is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'register_number'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    USERNAME_FIELD = 'register_number'
 
     def __str__(self):
         return f'{self.register_number}'

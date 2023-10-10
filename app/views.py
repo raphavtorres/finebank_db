@@ -23,9 +23,10 @@ class NaturalPersonPostViewSet(viewsets.GenericViewSet):
         social_name = request.data.get('social_name')
 
         customer = get_user_model().objects.create(
-            register_number=cpf, 
+            register_number=int(cpf),
+            username=str(cpf),
             password=password,
-            picture='picture'
+            picture='picture_path'
         )
 
         customer_obj = get_object_or_404(get_user_model(), pk=customer.pk)
@@ -48,7 +49,7 @@ class LegalPersonGetViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = LegalPerson.objects.all()
     serializer_class = LegalPersonGetSerializer
     # permission_classes = [CustomerGetPostPatch]
-    
+
 
 # POST
 class LegalPersonPostViewSet(viewsets.GenericViewSet):
@@ -65,7 +66,8 @@ class LegalPersonPostViewSet(viewsets.GenericViewSet):
         ie = request.data.get('ie')
 
         customer = get_user_model().objects.create(
-            register_number=cnpj,
+            register_number=int(cnpj),
+            username=str(cnpj),
             password=password,
             picture='picture2'
         )
@@ -74,7 +76,7 @@ class LegalPersonPostViewSet(viewsets.GenericViewSet):
 
         legal_person = LegalPerson.objects.create(
             customer=customer_obj,
-            cnpj=cnpj,
+            cnpj=str(cnpj),
             fantasy_name=fantasy_name,
             legal_nature=legal_nature,
             establishment_date=establishment_date,
@@ -83,7 +85,6 @@ class LegalPersonPostViewSet(viewsets.GenericViewSet):
         )
 
         return Response({'status': 'Legal Person Succesfully created'}, status=status.HTTP_201_CREATED)
-
 
 
 class EmailViewSet(viewsets.ModelViewSet):
