@@ -6,11 +6,10 @@ class CustomerAdmin(UserAdmin):
     add_form = CustomerCreateForm
     form = CustomerChangeForm
     model = Customer
-    list_display = ('register_number', 'username',
-                    'first_name', 'last_name', 'is_staff')
+    list_display = ('register_number', 'username', 'is_staff')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal Information', {'fields': ('first_name', 'last_name')}),
+        # ('Personal Information', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_active', 'is_staff',
                                     'is_superuser', 'groups', 'user_permissions')}),
         ('Important Dates', {'fields': ('last_login', 'date_joined')})
