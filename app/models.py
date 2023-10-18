@@ -99,7 +99,7 @@ class LegalPerson(Base):
 
 # OTHER
 class Email(Base):
-    customer = models.OneToOneField(
+    customer = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name='email_customer')
     email = models.EmailField(unique=True)
 
@@ -112,7 +112,7 @@ class Email(Base):
 
 
 class Phone(Base):
-    customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     phone = models.CharField(max_length=8)
     country_code = models.CharField(max_length=3)
     prefix_number = models.CharField(max_length=3)
