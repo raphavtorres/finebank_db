@@ -79,7 +79,7 @@ class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
             'name',
             'birthdate',
             'rg',
-            'social_name',
+            'social_name'
         ]
 
 

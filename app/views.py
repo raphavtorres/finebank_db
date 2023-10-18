@@ -2,17 +2,16 @@ from .imports.views import *
 
 
 # NATURAL PERSON
-# GET
-class NaturalPersonGetViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class NaturalPersonViewSet(viewsets.ModelViewSet):
     queryset = NaturalPerson.objects.all()
-    serializer_class = NaturalPersonGetSerializer
     # permission_classes = [CustomerGetPostPatch]
 
-
-# POST
-class NaturalPersonPostViewSet(viewsets.GenericViewSet):
-    serializer_class = NaturalPersonPostPatchSerializer
-    # permission_classes = [CustomerGetPostPatch]
+    # testing request HTTP method
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return NaturalPersonPostPatchSerializer
+        elif self.request.method in 'GET':
+            return NaturalPersonGetSerializer
 
     def create(self, request):
         cpf = request.data.get('cpf')
@@ -22,6 +21,7 @@ class NaturalPersonPostViewSet(viewsets.GenericViewSet):
         rg = request.data.get('rg')
         social_name = request.data.get('social_name')
 
+        # creating user
         customer = get_user_model().objects.create(
             register_number=int(cpf),
             username=str(cpf),
@@ -29,10 +29,9 @@ class NaturalPersonPostViewSet(viewsets.GenericViewSet):
             picture='picture_path'
         )
 
-        customer_obj = get_object_or_404(get_user_model(), pk=customer.pk)
-
+        # creating user type naturalperson
         natural_person = NaturalPerson.objects.create(
-            customer=customer_obj,
+            customer=customer,
             name=name,
             birthdate=birthdate,
             cpf=str(cpf),
@@ -45,7 +44,7 @@ class NaturalPersonPostViewSet(viewsets.GenericViewSet):
 
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
-    queryset = Investment.objects.all()
+    queryset = LegalPerson.objects.all()
     # permission_classes = []
 
     # testing request HTTP method
@@ -69,7 +68,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
             register_number=int(cnpj),
             username=str(cnpj),
             password=password,
-            picture='picture2'
+            picture='picture_path'
         )
 
         # creating user type legalperson
