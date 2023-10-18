@@ -44,17 +44,16 @@ class NaturalPersonPostViewSet(viewsets.GenericViewSet):
 
 
 # LEGAL PERSON
-# GET
-class LegalPersonGetViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = LegalPerson.objects.all()
-    serializer_class = LegalPersonGetSerializer
-    # permission_classes = [CustomerGetPostPatch]
-
-
-# POST
-class LegalPersonPostViewSet(viewsets.GenericViewSet):
-    serializer_class = LegalPersonPostPatchSerializer
+class LegalPersonViewSet(viewsets.ModelViewSet):
+    queryset = Investment.objects.all()
     # permission_classes = []
+
+    # testing request HTTP method
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return LegalPersonPostPatchSerializer
+        elif self.request.method in 'GET':
+            return LegalPersonGetSerializer
 
     def create(self, request):
         cnpj = request.data.get('cnpj')
@@ -65,6 +64,7 @@ class LegalPersonPostViewSet(viewsets.GenericViewSet):
         im = request.data.get('im')
         ie = request.data.get('ie')
 
+        # creating user
         customer = get_user_model().objects.create(
             register_number=int(cnpj),
             username=str(cnpj),
@@ -72,10 +72,9 @@ class LegalPersonPostViewSet(viewsets.GenericViewSet):
             picture='picture2'
         )
 
-        customer_obj = get_object_or_404(get_user_model(), pk=customer.pk)
-
+        # creating user type legalperson
         legal_person = LegalPerson.objects.create(
-            customer=customer_obj,
+            customer=customer,
             cnpj=str(cnpj),
             fantasy_name=fantasy_name,
             legal_nature=legal_nature,
