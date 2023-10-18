@@ -3,8 +3,8 @@ from .imports.url import *
 
 router = SimpleRouter()
 
-router.register('natural-people', NaturalPersonViewSet,
-                basename='natural-people')
+# router.register('natural-people', NaturalPersonViewSet,
+#                 basename='natural-people')
 router.register('legal-people', LegalPersonViewSet, basename='legal-people')
 router.register('emails', EmailViewSet)
 router.register('phones', PhoneViewSet)
