@@ -19,14 +19,14 @@ jwt_create_url = os.path.join(BASE_URL, 'auth/jwt/create/')
 
 
 # AUTH
-def create_jwt(edv, password):
+def create_jwt(register_number, password):
     response = requests.post(jwt_create_url, json={
-                             'edv': edv, 'password': password})
+                             'register_number': register_number, 'password': password})
     return response.json()['access']
 
 
 def create_header():
-    access_token = create_jwt(92901840, '123')
+    access_token = create_jwt(50050376837, '123')
     headers = {'Authorization': f'Bearer {access_token}'}
     return headers
 
@@ -51,10 +51,10 @@ def create_legal_person(headers, user):
 def main():
     HEADERS = create_header()
 
-    # NATURAL PERSON
-    print(create_natural_person(HEADERS, ''))
+    # CREATE NATURAL PERSON
+    # print(create_natural_person(HEADERS, ''))
 
-    # LEGAL PERSON
+    # CREATE LEGAL PERSON
     print(create_legal_person(HEADERS, ''))
 
 
