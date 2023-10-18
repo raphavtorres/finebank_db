@@ -59,6 +59,55 @@ def create_legal_person(cnpj, password, fantasy_name, establishment_date, im, ie
     return response.json()
 
 
+def create_email(email, customer):
+    response = requests.post(emails_url,
+                            json={
+                                "email": email,
+                                "customer": customer
+                            })
+    return response.json()
+
+
+def create_phone(phone, country_code, prefix_number, customer):
+    response = requests.post(phones_url,
+                            json={
+                                "phone": phone,
+                                "country_code": country_code,
+                                "prefix_number": prefix_number,
+                                "customer": customer
+                            })
+    return response.json()
+
+
+def create_address(neighborhood, street, number, city, state, cep, customer):
+    response = requests.post(addresses_url,
+                            json={
+                                "neighborhood": neighborhood,
+                                "street": street,
+                                "number": number,
+                                "city": city,
+                                "state": state,
+                                "cep": cep,
+                                "customer": customer
+                            })
+    return response.json()
+
+
+# def create_account():
+#     response = requests.post(accounts_url,
+#                             json={
+
+#                             })
+#     return response.json()
+
+
+# def create_investment():
+#     response = requests.post(investments_url,
+#                             json={
+
+#                             })
+#     return response.json()
+
 def main():
     # HEADERS = create_header()
 
@@ -71,6 +120,29 @@ def main():
     print(create_legal_person('72305148000145', 'test@test', 'Company1', '2000-12-10', im='33333', ie='925113970461', legal_nature='Comp1Name'))
     print(create_legal_person('03673451000188', 'test@test', 'Company2', '2003-12-02', im='22222', ie='024719352149', legal_nature='Comp2Name'))
     print(create_legal_person('18716263000167', 'test@test', 'Company3', '1980-12-04', im='11111', ie='451925422835', legal_nature='Comp3Name'))
+
+    # CREATE EMAIL
+    print(create_email('person1@gmail.com', '92154845070'))
+    print(create_email('person1second@gmail.com', '92154845070'))
+    print(create_email('company1@gmail.com', '72305148000145'))
+
+    # CREATE PHONE
+    print(create_phone('31212867', country_code='55', prefix_number='81', customer='92154845070'))
+    print(create_phone('23766213', country_code='55', prefix_number='63', customer='92154845070'))
+    print(create_phone('38203406', country_code='55', prefix_number='84', customer='72305148000145'))
+
+    # CREATE ADDRESS
+    print(create_address('Planalto', 'Treze', '769', 'Maceió', 'Alagoas', '69121410', '92154845070'))
+    print(create_address('Centro', 'Duque de Caxias', '28', 'Teófilo Otoni', 'Minas Gerais', '09769184', '03673451000188'))
+    print(create_address('São José', 'Bahia', '4225', 'Bacabal', 'Maranhão', '69387595', '48090331041'))
+    
+    # CREATE ACCOUNT
+    # CREATE INVESTMENT
+    # CREATE LOAN
+    # CREATE INSTALLMENT
+    # CREATE CARD
+    # CREATE TRANSACTION
+
 
 
 if __name__ == '__main__':

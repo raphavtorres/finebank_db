@@ -14,9 +14,9 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = [
             'id',
-            'number',
-            'agency',
-            'acc_type',
+            # 'number', auto
+            # 'agency',  default
+            'acc_type',  # POUPANÇA / CORRENTE
             'credit_limit',
             # 'is_active',
             'customers',
@@ -158,7 +158,7 @@ class AddressSerializer(serializers.ModelSerializer):
             'street',
             'number',
             'city',
-            'state'
+            'state',
             'cep',
             'customer'
         ]

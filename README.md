@@ -6,7 +6,7 @@ py manage.py runserver
 py populate.py
 
 
-LegalPerson json
+# LegalPerson
 ```json
 {
 	"cnpj" : "",
@@ -19,7 +19,7 @@ LegalPerson json
 }
 ```
 
-NaturalPerson json
+# NaturalPerson
 ```json
 {
 	"cpf" : "",
@@ -28,5 +28,36 @@ NaturalPerson json
 	"birthdate" : "0000-00-00",
 	"rg" : "",
 	"social_name": ""
+}
+```
+
+# Email
+```json
+{
+	"email": "name@example.com",
+	"customer": "pk.customer"
+}
+```
+
+# Phone
+```json
+{
+	"phone": "00000000",
+	"country_code": "55",
+	"prefix_number": "000",
+	"customer": "pk.customer"
+}
+```
+
+```json
+Address
+{
+    "neighborhood": "",
+    "street": "",
+    "number": "",
+    "city": "",
+    "state": "",
+    "cep": "",
+    "customer": "pk.customer"
 }
 ```

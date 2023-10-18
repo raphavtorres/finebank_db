@@ -89,28 +89,28 @@ class EmailViewSet(viewsets.ModelViewSet):
     queryset = Email.objects.all()
     serializer_class = EmailSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    # permission_classes = [CustomerGetPostPatch]
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
     queryset = Phone.objects.all()
     serializer_class = PhoneSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    # permission_classes = [CustomerGetPostPatch]
 
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    # permission_classes = [CustomerGetPostPatch]
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    # permission_classes = [CustomerGetPostPatch]
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
