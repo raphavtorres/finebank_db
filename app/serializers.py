@@ -2,7 +2,7 @@ from .imports.serializers import *
 
 
 # ACCOUNT
-# GET
+# GET ACCOUNT INFO
 class AccountSerializer(serializers.ModelSerializer):
 
     investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -26,7 +26,7 @@ class AccountSerializer(serializers.ModelSerializer):
         ]
 
 
-# POST AND PATCH
+# CREATE AND UPDATE ACCOUNT
 class AccountPostPatchSerializer(serializers.ModelSerializer):
 
     investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
@@ -46,7 +46,7 @@ class AccountPostPatchSerializer(serializers.ModelSerializer):
 
 
 # NATURAL PERSON
-# GET
+# GET NATURAL PERSON INFO
 class NaturalPersonGetSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
@@ -66,7 +66,7 @@ class NaturalPersonGetSerializer(serializers.ModelSerializer):
         ]
 
 
-# POST AND PATCH
+# CREATE AND UPDATE NATURAL PERSON
 class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(max_length=30)
@@ -84,7 +84,7 @@ class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
 
 
 # LEGAL PERSON
-# GET
+# GET LEGAL PERSON INFO
 class LegalPersonGetSerializer(serializers.ModelSerializer):
 
     accounts = AccountSerializer(many=True, read_only=True)
@@ -103,7 +103,7 @@ class LegalPersonGetSerializer(serializers.ModelSerializer):
         ]
 
 
-# POST AND PATCH
+# CREATE AND UPDATE LEGAL PERSON
 class LegalPersonPostPatchSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(max_length=30)
@@ -117,7 +117,7 @@ class LegalPersonPostPatchSerializer(serializers.ModelSerializer):
             'establishment_date',
             'im',
             'ie',
-            'legal_nature',
+            'legal_nature'
         ]
 
 
