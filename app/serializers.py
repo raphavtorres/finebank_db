@@ -3,22 +3,20 @@ from .imports.serializers import *
 
 # ACCOUNT
 # GET ACCOUNT INFO
-class AccountSerializer(serializers.ModelSerializer):
+class AccountGetSerializer(serializers.ModelSerializer):
 
     investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     loans = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     cards = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        # extra_kwargs = {}
         model = Account
         fields = [
             'id',
-            # 'number', auto
-            # 'agency',  default
+            'number',
+            'agency',
             'acc_type',  # POUPANÇA / CORRENTE
             'credit_limit',
-            # 'is_active',
             'customers',
             'investments',
             'loans',
@@ -34,14 +32,9 @@ class AccountPostPatchSerializer(serializers.ModelSerializer):
     cards = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
-        # extra_kwargs = {}
         model = Account
         fields = [
-            'id',
-            'number',
-            'agency',
             'acc_type',
-            'credit_limit',
         ]
 
 
@@ -49,7 +42,7 @@ class AccountPostPatchSerializer(serializers.ModelSerializer):
 # GET NATURAL PERSON INFO
 class NaturalPersonGetSerializer(serializers.ModelSerializer):
 
-    accounts = AccountSerializer(many=True, read_only=True)
+    accounts = AccountGetSerializer(many=True, read_only=True)
 
     class Meta:
         # extra_kwargs = {}
@@ -87,7 +80,7 @@ class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
 # GET LEGAL PERSON INFO
 class LegalPersonGetSerializer(serializers.ModelSerializer):
 
-    accounts = AccountSerializer(many=True, read_only=True)
+    accounts = AccountGetSerializer(many=True, read_only=True)
 
     class Meta:
         model = LegalPerson
@@ -173,6 +166,21 @@ class InvestmentSerializer(serializers.ModelSerializer):
             'id',
             'investment_type',
             'contribution',
+            'admin_fee',
+            'period'
+            'risc_rate',
+            'profitability'
+        )
+
+
+class AccountInvestmentGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountInvestment
+        fields = (
+            'id',
+            'id_account',
+            'investment_type',
+            'contribution',
             'income',
             'admin_fee',
             'period'
@@ -181,18 +189,11 @@ class InvestmentSerializer(serializers.ModelSerializer):
         )
 
 
-class AccountInvestmentSerializer(serializers.ModelSerializer):
+class AccountInvestmentPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
         fields = (
-            'id',
-            'investment_type',
-            'contribution',
-            'income',
-            'admin_fee',
-            'period'
-            'risc_rate',
-            'profitability'
+            'id_investment'
         )
 
 

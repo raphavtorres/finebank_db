@@ -10,6 +10,7 @@ from app.views import (
     AddressViewSet,
     AccountViewSet,
     InvestmentViewSet,
+    AccountInvestmentViewSet,
     LoanViewSet,
     InstallmentViewSet,
     CardViewSet,

@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
+import random
+from datetime import datetime, timedelta
+
 
 from app.models import (
     NaturalPerson,
@@ -14,6 +17,7 @@ from app.models import (
     Address,
     Account,
     Investment,
+    AccountInvestment,
     Loan,
     Installment,
     Card,
@@ -26,13 +30,19 @@ from app.serializers import (
 
     LegalPersonGetSerializer,
     LegalPersonPostPatchSerializer,
-    
+
     EmailSerializer,
     PhoneSerializer,
     AddressSerializer,
-    AccountSerializer,
+
+    AccountGetSerializer,
+    AccountPostPatchSerializer,
+
     InvestmentSerializer,
-    AccountInvestmentSerializer,
+
+    AccountInvestmentPostPatchSerializer,
+    AccountInvestmentGetSerializer,
+
     LoanSerializer,
     InstallmentSerializer,
     CardSerializer,

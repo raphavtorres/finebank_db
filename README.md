@@ -49,8 +49,8 @@ py populate.py
 }
 ```
 
+# Address
 ```json
-Address
 {
     "neighborhood": "",
     "street": "",
@@ -59,5 +59,24 @@ Address
     "state": "",
     "cep": "",
     "customer": "pk.customer"
+}
+```
+
+# Account
+```json
+{
+	"acc_type": "checking | savings"
+}
+```
+
+# Investment
+```json
+{
+	"investment_type": "Tesouro Direto",
+	"contribution": 200.00,
+	"admin_fee": 0.02,
+	"period": "2026-01-01",
+	"risc_rate": "Baixo Risco",
+	"profitability": 0.10
 }
 ```

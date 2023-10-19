@@ -39,7 +39,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
             social_name=social_name
         )
 
-        return Response({'status': 'Natural Person Succesfully created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Natural Person Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 # LEGAL PERSON
@@ -82,7 +82,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
             ie=ie
         )
 
-        return Response({'status': 'Legal Person Succesfully created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Legal Person Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 class EmailViewSet(viewsets.ModelViewSet):
@@ -108,23 +108,98 @@ class AddressViewSet(viewsets.ModelViewSet):
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
-    serializer_class = AccountSerializer
-
     # permission_classes = [CustomerGetPostPatch]
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return AccountPostPatchSerializer
+        elif self.request.method in 'GET':
+            return AccountGetSerializer
+
+    def create(self, request):
+        def get_random_number(length):
+            return ''.join(random.choice('0123456789') for _ in range(0, length))
+
+        # account parameters
+        acc_number = get_random_number(8)
+        agency = '4242'
+        acc_type = request.data.get('acc_type')  # POUPANÇA / CORRENTE
+        credit_limit = 800.00
+        customer = self.request.user.pk
+
+        # card parameters
+        card_number = get_random_number(16)
+        verification_code = get_random_number(3)
+        flag = random.choice(["MasterCard", "Visa", "Elo"])
+        expiration_date = datetime.now() + timedelta(days=365*5)
+
+        # creating account
+        account = Account.objects.create(
+            number=acc_number,
+            agency=agency,
+            acc_type=acc_type,
+            credit_limit=credit_limit,
+            is_active=True
+        )
+        account.customer.add(customer)
+
+        # creating card
+        card = Card.objects.create(
+            account=account,
+            number=card_number,
+            verification_code=verification_code,
+            flag=flag,
+            expiration_date=expiration_date,
+            is_active=True
+        )
+
+        return Response({'status': 'Account Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
+    # permission_classes = [CustomerGetPermission]
     serializer_class = InvestmentSerializer
-
-    permission_classes = [CustomerGetPermission]
 
 
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
-    queryset = Investment.objects.all()
-    serializer_class = AccountInvestmentSerializer
+    queryset = AccountInvestment.objects.all()
+    # permission_classes = [CustomerGetPostPatch]
 
-    permission_classes = [CustomerGetPostPatch]
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return AccountInvestmentPostPatchSerializer
+        elif self.request.method in 'GET':
+            return AccountInvestmentGetSerializer
+
+    def create(self, request):
+        # getting investment in "Investment" table
+        id_investment = request.data.get('id_investment')
+        investment = get_object_or_404(Investment, pk=id_investment)
+
+        # getting info for AccountInvestment based on the Investment received
+        id_account = self.request.user.pk
+        investment_type = investment.investment_type
+        contribution = investment.contribution
+        income = 0.00
+        admin_fee = investment.admin_fee
+        period = investment.period
+        risc_rate = investment.risc_rate
+        profitability = investment.profitability
+
+        # creating AccountInvestment
+        AccountInvestment.objects.create(
+            id_account=id_account,
+            investment_type=investment_type,
+            contribution=contribution,
+            income=income,
+            admin_fee=admin_fee,
+            period=period,
+            risc_rate=risc_rate,
+            profitability=profitability
+        )
+
+        return Response({'status': 'Account Investment Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 class LoanViewSet(viewsets.ModelViewSet):

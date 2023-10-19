@@ -168,13 +168,25 @@ class Account(Base):
 
 # INVESTMENT
 class Investment(Base):
-    investment_type = models.CharField(max_length=50)
-    contribution = models.FloatField()  # amount
-    income = models.FloatField()
-    admin_fee = models.FloatField()
-    period = models.DateField()
-    risc_rate = models.FloatField()
-    profitability = models.FloatField()
+    OPTIONS = (
+        ('Tesouro Direto', 'Tesouro Direto'),
+        ('CBD', 'CBD'),
+        ('LCI', 'LCI'),
+    )
+
+    RISC_RATE = (
+        ('Baixo Risco', 'Baixo Risco'),
+        ('Médio Risco', 'Médio Risco'),
+        ('Alto Risco', 'Alto Risco'),
+    )
+
+    investment_type = models.CharField(choices=OPTIONS, max_length=50)
+    contribution = models.FloatField()  # valor do investimento
+    admin_fee = models.FloatField()  # IR
+    period = models.DateField()  # data de vencimento
+    risc_rate = models.CharField(
+        choices=RISC_RATE, max_length=5)  # alto, médio, baixo
+    profitability = models.FloatField()  # rendimento anual
 
     class Meta:
         verbose_name = 'Investment'
@@ -186,6 +198,7 @@ class Investment(Base):
 
 class AccountInvestment(Investment):
     id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    income = models.FloatField()  # quanto rendeu
 
     class Meta:
         verbose_name = 'Account Investment'
