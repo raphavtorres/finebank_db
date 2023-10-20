@@ -123,7 +123,8 @@ class AccountViewSet(viewsets.ModelViewSet):
         # account parameters
         acc_number = get_random_number(8)
         agency = '4242'
-        acc_type = request.data.get('acc_type')  # POUPANÇA / CORRENTE
+        acc_type = request.data.get('acc_type')
+        print(acc_type)  # POUPANÇA / CORRENTE
         credit_limit = 800.00
         customer = self.request.user.pk
 
@@ -178,7 +179,9 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
         investment = get_object_or_404(Investment, pk=id_investment)
 
         # getting info for AccountInvestment based on the Investment received
-        id_account = self.request.user.pk
+        id_account = request.data.get('id_account')
+        id_account = get_object_or_404(Account, pk=id_account)
+
         investment_type = investment.investment_type
         contribution = investment.contribution
         income = 0.00

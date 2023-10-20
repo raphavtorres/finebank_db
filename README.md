@@ -76,7 +76,15 @@ py populate.py
 	"contribution": 200.00,
 	"admin_fee": 0.02,
 	"period": "2026-01-01",
-	"risc_rate": "Baixo Risco",
+	"risc_rate": "Baixo",
 	"profitability": 0.10
+}
+```
+
+# AccountInvestment
+```json
+{
+	"id_investment": 1,
+	"id_account": 2
 }
 ```

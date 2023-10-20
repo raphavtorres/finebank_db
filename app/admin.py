@@ -70,7 +70,7 @@ class AccountAdmin(admin.ModelAdmin):
 @admin.register(Investment)
 class InvestmentAdmin(admin.ModelAdmin):
     list_display = ['id', 'investment_type', 'contribution',
-                    'income', 'admin_fee', 'period', 'risc_rate', 'profitability']
+                    'admin_fee', 'period', 'risc_rate', 'profitability']
     ordering = ['id']
 
 

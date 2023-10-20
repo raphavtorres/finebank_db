@@ -11,6 +11,7 @@ phones_url = os.path.join(BASE_URL, 'phones/')
 addresses_url = os.path.join(BASE_URL, 'addresses/')
 accounts_url = os.path.join(BASE_URL, 'accounts/')
 investments_url = os.path.join(BASE_URL, 'investments/')
+account_investments_url = os.path.join(BASE_URL, 'account-investments/')
 loans_url = os.path.join(BASE_URL, 'loans/')
 installments_url = os.path.join(BASE_URL, 'installments/')
 cards_url = os.path.join(BASE_URL, 'cards/')
@@ -101,12 +102,27 @@ def create_account(acc_type):
     return response.json()
 
 
-# def create_investment():
-#     response = requests.post(investments_url,
-#                             json={
+def create_investment(investment_type, contribution, admin_fee, period, risc_rate, profitability):
+    response = requests.post(investments_url,
+                             json={
+                                 "investment_type": investment_type,
+                                 "contribution": contribution,
+                                 "admin_fee": admin_fee,
+                                 "period": period,
+                                 "risc_rate": risc_rate,
+                                 "profitability": profitability
+                             })
+    return response.json()
 
-#                             })
-#     return response.json()
+
+def create_account_investment(id_investment, id_account):
+    response = requests.post(account_investments_url,
+                             json={
+                                 "id_investment": id_investment,
+                                 "id_account": id_account
+                             })
+    return response.json()
+
 
 def main():
     # HEADERS = create_header()
@@ -153,8 +169,18 @@ def main():
     print(create_account("savings"))
 
     # CREATE INVESTMENT
+    print(create_investment("Tesouro Direto", 350.00, admin_fee=0.01,
+          period="2026-01-01", risc_rate="Baixo", profitability=0.10))
+    print(create_investment("CDB", 200.00, admin_fee=0.02,
+          period="2027-01-01", risc_rate="Médio", profitability=0.11))
+    print(create_investment("LCI", 540.00, admin_fee=0.012,
+          period="2028-01-01", risc_rate="Alto", profitability=0.12))
 
     # CREATE ACCOUNT INVESTMENT
+    print(create_account_investment(id_investment=1, id_account=2))
+    print(create_account_investment(id_investment=2, id_account=2))
+    print(create_account_investment(id_investment=3, id_account=2))
+
     # CREATE LOAN
     # CREATE INSTALLMENT
     # CREATE CARD

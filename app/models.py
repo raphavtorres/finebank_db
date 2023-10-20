@@ -146,10 +146,10 @@ class Address(Base):
 class Account(Base):
     # corrente
     # poupança
-    OPTIONS = (
+    OPTIONS = [
         ('checking', 'checking'),
-        ('savings ', 'savings ')
-    )
+        ('savings', 'savings')
+    ]
 
     customer = models.ManyToManyField(get_user_model())
     number = models.CharField(max_length=8)
@@ -168,17 +168,17 @@ class Account(Base):
 
 # INVESTMENT
 class Investment(Base):
-    OPTIONS = (
+    OPTIONS = [
         ('Tesouro Direto', 'Tesouro Direto'),
-        ('CBD', 'CBD'),
-        ('LCI', 'LCI'),
-    )
+        ('CDB', 'CDB'),
+        ('LCI', 'LCI')
+    ]
 
-    RISC_RATE = (
-        ('Baixo Risco', 'Baixo Risco'),
-        ('Médio Risco', 'Médio Risco'),
-        ('Alto Risco', 'Alto Risco'),
-    )
+    RISC_RATE = [
+        ('Baixo', 'Baixo'),
+        ('Médio', 'Médio'),
+        ('Alto', 'Alto')
+    ]
 
     investment_type = models.CharField(choices=OPTIONS, max_length=50)
     contribution = models.FloatField()  # valor do investimento
@@ -258,10 +258,10 @@ class Card(Base):
 
 
 class Transaction(Base):
-    OPTIONS = (
+    OPTIONS = [
         ('Credit', 'Credit'),
         ('Debit', 'Debit')
-    )
+    ]
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
     amount = models.FloatField()
     transaction_type = models.CharField(choices=OPTIONS, max_length=6)

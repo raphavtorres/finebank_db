@@ -167,7 +167,7 @@ class InvestmentSerializer(serializers.ModelSerializer):
             'investment_type',
             'contribution',
             'admin_fee',
-            'period'
+            'period',
             'risc_rate',
             'profitability'
         )
@@ -183,7 +183,7 @@ class AccountInvestmentGetSerializer(serializers.ModelSerializer):
             'contribution',
             'income',
             'admin_fee',
-            'period'
+            'period',
             'risc_rate',
             'profitability'
         )
@@ -193,7 +193,8 @@ class AccountInvestmentPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
         fields = (
-            'id_investment'
+            'id_investment',
+            'id_account'
         )
 
 
