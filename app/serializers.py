@@ -199,7 +199,7 @@ class AccountInvestmentPostPatchSerializer(serializers.ModelSerializer):
 
 
 # LOAN
-class LoanSerializer(serializers.ModelSerializer):
+class LoanGetSerializer(serializers.ModelSerializer):
 
     installments = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True)
@@ -214,6 +214,22 @@ class LoanSerializer(serializers.ModelSerializer):
             'installment_amount',
             'request_date'
             'approval_date',
+            'observation'
+        )
+
+
+class LoanPostPatchSerializer(serializers.ModelSerializer):
+
+    installments = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=True)
+
+    class Meta:
+        model = Loan
+        fields = (
+            'amount_request',
+            'interest_rate',
+            'is_payout',
+            'installment_amount',
             'observation'
         )
 

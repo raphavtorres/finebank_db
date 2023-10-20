@@ -117,9 +117,6 @@ class AccountViewSet(viewsets.ModelViewSet):
             return AccountGetSerializer
 
     def create(self, request):
-        def get_random_number(length):
-            return ''.join(random.choice('0123456789') for _ in range(0, length))
-
         # account parameters
         acc_number = get_random_number(8)
         agency = '4242'
@@ -207,16 +204,56 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
 
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
-    serializer_class = LoanSerializer
+    # permission_classes = [CustomerGetPostPatch]
 
-    permission_classes = [CustomerGetPostPatch]
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return LoanPostPatchSerializer
+        elif self.request.method in 'GET':
+            return LoanGetSerializer
+
+    def create(self, request):
+        # Getting loan information
+        amount_request = request.data.get('amount_request')
+        interest_rate = request.data.get('interest_rate')
+        is_payout = request.data.get('is_payout')
+        installment_amount = request.data.get('installment_amount')
+        approval_date = datetime.now().strftime('%Y-%m-%d')
+        observation = request.data.get('observation')
+
+        # testar total na conta
+        loan = Loan.objects.create(
+            amount_request=amount_request,
+            interest_rate=interest_rate,
+            is_payout=is_payout,
+            installment_amount=installment_amount,
+            approval_date=approval_date,
+            observation=observation
+        )
+
+        # Getting installment information
+        # number = get_random_number(8)
+        # payment_amount = amount_request / installment_amount
+        # payment_date = models.DateField()
+        # expiration_date = models.DateField()
+
+        # Installment.objects.create(
+        #     loan = loan
+        #     number =
+        #     payment_amount = models.FloatField()
+        #     payment_date = models.DateField()
+        #     expiration_date = models.DateField()
+
+        # )
+
+        return Response({'status': 'Loan Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 class InstallmentViewSet(viewsets.ModelViewSet):
     queryset = Installment.objects.all()
     serializer_class = InstallmentSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPermission]
 
 
 class CardViewSet(viewsets.ModelViewSet):
@@ -231,3 +268,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
 
     permission_classes = [CustomerGetPostPatch]
+
+
+def get_random_number(length):
+    return ''.join(random.choice('0123456789') for _ in range(0, length))

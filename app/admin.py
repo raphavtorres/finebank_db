@@ -84,7 +84,7 @@ class AccountInvestmentAdmin(admin.ModelAdmin):
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
     list_display = ['id', 'id_account', 'amount_request', 'interest_rate', 'is_payout',
-                    'installment_amount', 'request_date', 'approval_date', 'observation']
+                    'installment_amount', 'request_date', 'approval_date', 'is_approved', 'observation']
     ordering = ['id']
 
 

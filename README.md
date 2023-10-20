@@ -88,3 +88,22 @@ py populate.py
 	"id_account": 2
 }
 ```
+
+# Loan
+```json
+{
+	"amount_request": 2000.00,
+	"interest_rate": "",
+	"is_payout": "",
+	"installment_amount": "",
+	"approval_date": "",
+	"observation": ""
+}
+```
+
+# Installment
+Only Get
+
+# Card
+
+# Transaction

@@ -43,7 +43,9 @@ from app.serializers import (
     AccountInvestmentPostPatchSerializer,
     AccountInvestmentGetSerializer,
 
-    LoanSerializer,
+    LoanGetSerializer,
+    LoanPostPatchSerializer,
+
     InstallmentSerializer,
     CardSerializer,
     TransactionSerializer,
