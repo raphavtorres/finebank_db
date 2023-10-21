@@ -156,6 +156,7 @@ class Account(Base):
     agency = models.CharField(max_length=8)
     acc_type = models.CharField(choices=OPTIONS, max_length=9)
     credit_limit = models.DecimalField(max_digits=9, decimal_places=2)
+    balance = models.DecimalField(decimal_places=2, max_digits=9, default=0)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -167,7 +168,9 @@ class Account(Base):
 
 
 # INVESTMENT
-class Investment(Base):
+class InvestmentBase(Base):
+    """Model used in heritage to Investment and AccountInvestment
+    to avoid code repetition"""
     OPTIONS = [
         ('Tesouro Direto', 'Tesouro Direto'),
         ('CDB', 'CDB'),
@@ -188,6 +191,9 @@ class Investment(Base):
         choices=RISC_RATE, max_length=5)  # alto, médio, baixo
     profitability = models.FloatField()  # rendimento anual
 
+
+class Investment(InvestmentBase):
+
     class Meta:
         verbose_name = 'Investment'
         verbose_name_plural = 'Investments'
@@ -196,7 +202,7 @@ class Investment(Base):
         return f'{self.investment_type}'
 
 
-class AccountInvestment(Investment):
+class AccountInvestment(InvestmentBase):
     id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
     income = models.FloatField()  # quanto rendeu
 
@@ -219,7 +225,7 @@ class Loan(Base):
                                              ])
     request_date = models.DateTimeField(auto_now_add=True)
     approval_date = models.DateField()
-    is_approved = models.BooleanField()
+    is_approved = models.BooleanField(default=False)
     observation = models.TextField(max_length=300)
 
     class Meta:
@@ -234,8 +240,9 @@ class Installment(Base):
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
     number = models.CharField(max_length=8)
     payment_amount = models.FloatField()
-    payment_date = models.DateField()
+    payment_date = models.DateField(null=True, blank=True)
     expiration_date = models.DateField()
+    is_paid = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Installment'
@@ -251,7 +258,7 @@ class Card(Base):
     verification_code = models.CharField(max_length=3)
     flag = models.CharField(max_length=20)
     expiration_date = models.DateField()
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Card'

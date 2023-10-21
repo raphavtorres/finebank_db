@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 
 import random
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 
 from app.models import (
@@ -46,7 +47,7 @@ from app.serializers import (
     LoanGetSerializer,
     LoanPostPatchSerializer,
 
-    InstallmentSerializer,
+    InstallmentPostGetSerializer,
     CardSerializer,
     TransactionSerializer,
 )

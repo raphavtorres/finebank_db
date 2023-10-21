@@ -94,10 +94,11 @@ def create_address(neighborhood, street, number, city, state, cep, customer):
     return response.json()
 
 
-def create_account(acc_type):
+def create_account(acc_type, balance):
     response = requests.post(accounts_url,
                              json={
-                                 "acc_type": acc_type
+                                 "acc_type": acc_type,
+                                 "balance": balance
                              })
     return response.json()
 
@@ -165,8 +166,8 @@ def main():
           'Bacabal', 'Maranhão', '69387595', '48090331041'))
 
     # CREATE ACCOUNT - need user authenticated to make relation
-    print(create_account("checking"))
-    print(create_account("savings"))
+    print(create_account("checking", balance=2000.00))
+    print(create_account("savings", balance=5000.00))
 
     # CREATE INVESTMENT
     print(create_investment("Tesouro Direto", 350.00, admin_fee=0.01,

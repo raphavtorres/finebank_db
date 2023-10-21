@@ -63,7 +63,7 @@ class AddressAdmin(admin.ModelAdmin):
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'agency',
-                    'acc_type', 'credit_limit', 'is_active']
+                    'acc_type', 'credit_limit', 'balance', 'is_active']
     ordering = ['id']
 
 
@@ -91,7 +91,7 @@ class LoanAdmin(admin.ModelAdmin):
 @admin.register(Installment)
 class InstallmentAdmin(admin.ModelAdmin):
     list_display = ['id', 'loan', 'number',
-                    'payment_amount', 'payment_date', 'expiration_date']
+                    'payment_amount', 'payment_date', 'expiration_date', 'is_paid']
     ordering = ['id']
 
 

@@ -221,37 +221,54 @@ class LoanViewSet(viewsets.ModelViewSet):
         approval_date = datetime.now().strftime('%Y-%m-%d')
         observation = request.data.get('observation')
 
-        # testar total na conta
-        loan = Loan.objects.create(
-            amount_request=amount_request,
-            interest_rate=interest_rate,
-            is_payout=is_payout,
-            installment_amount=installment_amount,
-            approval_date=approval_date,
-            observation=observation
-        )
+        id_account = request.data.get('id_account')
+        account = get_object_or_404(Account, pk=id_account)
+
+        def create_loan(is_approved):
+            loan = Loan.objects.create(
+                id_account=account,
+                amount_request=amount_request,
+                interest_rate=interest_rate,
+                is_payout=is_payout,
+                installment_amount=installment_amount,
+                approval_date=approval_date,
+                is_approved=is_approved,
+                observation=observation
+            )
+            return loan
 
         # Getting installment information
-        # number = get_random_number(8)
-        # payment_amount = amount_request / installment_amount
-        # payment_date = models.DateField()
-        # expiration_date = models.DateField()
+        number = get_random_number(8)
+        payment_amount = amount_request / installment_amount
 
-        # Installment.objects.create(
-        #     loan = loan
-        #     number =
-        #     payment_amount = models.FloatField()
-        #     payment_date = models.DateField()
-        #     expiration_date = models.DateField()
+        # margem consignável
+        consignable_margin = account.balance * Decimal(0.40)
+        # Approved
+        if consignable_margin > payment_amount:
+            loan = create_loan(True)
 
-        # )
+            # payment_date
+            for i in range(installment_amount):
+                expiration_date = datetime.now() + timedelta(30 * i)
 
-        return Response({'status': 'Loan Succesfully Created'}, status=status.HTTP_201_CREATED)
+                Installment.objects.create(
+                    loan=loan,
+                    number=number,
+                    payment_amount=payment_amount,
+                    expiration_date=expiration_date,
+                    is_paid=False
+                )
+
+            return Response({'status': 'Loan Succesfully Created'}, status=status.HTTP_201_CREATED)
+
+        # Rejected
+        create_loan(False)
+        return Response({'status': 'Not eligible to receive the loan'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class InstallmentViewSet(viewsets.ModelViewSet):
     queryset = Installment.objects.all()
-    serializer_class = InstallmentSerializer
+    serializer_class = InstallmentPostGetSerializer
 
     permission_classes = [CustomerGetPermission]
 

@@ -65,7 +65,8 @@ py populate.py
 # Account
 ```json
 {
-	"acc_type": "checking | savings"
+	"acc_type": "checking | savings",
+	"balance": 0
 }
 ```
 
@@ -92,11 +93,11 @@ py populate.py
 # Loan
 ```json
 {
-	"amount_request": 2000.00,
-	"interest_rate": "",
-	"is_payout": "",
-	"installment_amount": "",
-	"approval_date": "",
+	"id_account": 1,
+	"amount_request": 200,
+	"interest_rate": 0.05,
+	"is_payout": false,
+	"installment_amount": 1,
 	"observation": ""
 }
 ```

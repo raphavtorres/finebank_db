@@ -17,6 +17,7 @@ class AccountGetSerializer(serializers.ModelSerializer):
             'agency',
             'acc_type',  # POUPANÇA / CORRENTE
             'credit_limit',
+            'balance',
             'customers',
             'investments',
             'loans',
@@ -35,6 +36,7 @@ class AccountPostPatchSerializer(serializers.ModelSerializer):
         model = Account
         fields = [
             'acc_type',
+            'balance'
         ]
 
 
@@ -162,7 +164,7 @@ class InvestmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Investment
-        fields = (
+        fields = [
             'id',
             'investment_type',
             'contribution',
@@ -170,13 +172,13 @@ class InvestmentSerializer(serializers.ModelSerializer):
             'period',
             'risc_rate',
             'profitability'
-        )
+        ]
 
 
 class AccountInvestmentGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
-        fields = (
+        fields = [
             'id',
             'id_account',
             'investment_type',
@@ -186,16 +188,16 @@ class AccountInvestmentGetSerializer(serializers.ModelSerializer):
             'period',
             'risc_rate',
             'profitability'
-        )
+        ]
 
 
 class AccountInvestmentPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
-        fields = (
+        fields = [
             'id_investment',
             'id_account'
-        )
+        ]
 
 
 # LOAN
@@ -206,46 +208,57 @@ class LoanGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Loan
-        fields = (
+        fields = [
             'id',
+            'id_account',
             'amount_request',
             'interest_rate',
             'is_payout',
             'installment_amount',
-            'request_date'
+            'request_date',
             'approval_date',
-            'observation'
-        )
+            'observation',
+            'installments'
+        ]
 
 
 class LoanPostPatchSerializer(serializers.ModelSerializer):
 
-    installments = serializers.PrimaryKeyRelatedField(
-        many=True, read_only=True)
-
     class Meta:
         model = Loan
-        fields = (
+        fields = [
+            'id_account',
             'amount_request',
             'interest_rate',
             'is_payout',
             'installment_amount',
             'observation'
-        )
+        ]
 
 
 # INSTALLMENT
-class InstallmentSerializer(serializers.ModelSerializer):
+class InstallmentPostGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Installment
-        fields = (
+        fields = [
             'id',
             'number',
             'payment_amount',
             'payment_date',
-            'expiration_date'
-        )
+            'expiration_date',
+            'is_paid'
+        ]
+
+
+class InstallmentPatchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Installment
+        fields = [
+            'payment_date',
+            'is_paid'
+        ]
 
 
 # CARD
@@ -256,7 +269,7 @@ class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Card
-        fields = (
+        fields = [
             'id',
             'number',
             'verification_code',
@@ -264,7 +277,7 @@ class CardSerializer(serializers.ModelSerializer):
             'expiration_date',
             'is_active',
             'transactions'
-        )
+        ]
 
 
 # TRANSACTION
@@ -272,9 +285,9 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
-        fields = (
+        fields = [
             'id',
             'amount',
             'transaction_type',
             'timestamp'
-        )
+        ]
