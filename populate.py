@@ -125,6 +125,19 @@ def create_account_investment(id_investment, id_account):
     return response.json()
 
 
+def create_loan(id_account, amount_request, interest_rate, is_payout, installment_amount, observation):
+    response = requests.post(loans_url,
+                             json={
+                                 "id_account": id_account,
+                                 "amount_request": amount_request,
+                                 "interest_rate": interest_rate,
+                                 "is_payout": is_payout,
+                                 "installment_amount": installment_amount,
+                                 "observation": observation
+                             })
+    return response.json()
+
+
 def main():
     # HEADERS = create_header()
 
@@ -183,7 +196,9 @@ def main():
     print(create_account_investment(id_investment=3, id_account=2))
 
     # CREATE LOAN
-    # CREATE INSTALLMENT
+    print(create_loan(1, 200, 0.05, False, 3, ""))
+    print(create_loan(2, 100, 0.03, False, 2, ""))
+
     # CREATE CARD
     # CREATE TRANSACTION
 
