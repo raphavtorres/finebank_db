@@ -53,7 +53,8 @@ from app.serializers import (
     CardGetSerializer,
     CardPostPatchSerializer,
 
-    TransactionSerializer,
+    TransactionGetSerializer,
+    TransactionPostPatchSerializer,
 
     BankStatementSerializer,
 )

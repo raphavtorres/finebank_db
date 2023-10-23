@@ -15,5 +15,6 @@ from app.models import (
     Loan,
     Installment,
     Card,
-    Transaction
+    Transaction,
+    BankStatement
 )

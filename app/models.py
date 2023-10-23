@@ -184,7 +184,7 @@ class InvestmentBase(Base):
     ]
 
     investment_type = models.CharField(choices=OPTIONS, max_length=50)
-    contribution = models.FloatField()  # valor do investimento
+    contribution =  models.DecimalField(max_digits=9, decimal_places=2)  # valor do investimento
     admin_fee = models.FloatField()  # IR
     period = models.DateField()  # data de vencimento
     risc_rate = models.CharField(
@@ -292,7 +292,8 @@ class BankStatement(Base):
         ('Sent', 'Sent')
     ]
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    transaction_action = models.CharField(choices=OPTIONS, max_length=6)
+    transaction_action = models.CharField(choices=OPTIONS, max_length=8)
+    source = models.CharField(max_length=15)
     amount = models.FloatField()
     account_balance = models.DecimalField(decimal_places=2, max_digits=9)
 

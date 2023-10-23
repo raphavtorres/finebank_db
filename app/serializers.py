@@ -282,8 +282,8 @@ class CardGetSerializer(serializers.ModelSerializer):
 
 class CardPostPatchSerializer(serializers.ModelSerializer):
 
-    transactions = serializers.PrimaryKeyRelatedField(
-        many=True, read_only=True)
+    # transactions = serializers.PrimaryKeyRelatedField(
+    #     many=True, read_only=True)
 
     class Meta:
         model = Card
@@ -293,21 +293,32 @@ class CardPostPatchSerializer(serializers.ModelSerializer):
 
 
 # TRANSACTION
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
         fields = [
             'id',
+            'card',
             'amount',
             'transaction_type',
             'timestamp'
         ]
 
+
+class TransactionPostPatchSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = [
+            'card',
+            'amount',
+            'transaction_type',
+        ]
+
+
 # BANKSTATEMENT
-
-
-class BankStatement(serializers.ModelSerializer):
+class BankStatementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankStatement

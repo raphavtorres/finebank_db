@@ -181,8 +181,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
         account = get_object_or_404(Account, pk=id_account)
 
         if account.balance >= investment.contribution:
-            account.balance -= investment.contribution
-
+            # account.balance -= investment.contribution
             investment_type = investment.investment_type
             contribution = investment.contribution
             income = 0.00
@@ -190,6 +189,9 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
             period = investment.period
             risc_rate = investment.risc_rate
             profitability = investment.profitability
+
+            # adding to BankStatement table
+            create_bankstatement(account, 'Sent', 'Investment', contribution)
 
             # creating AccountInvestment
             AccountInvestment.objects.create(
@@ -241,6 +243,9 @@ class LoanViewSet(viewsets.ModelViewSet):
                 observation=observation
             )
             return loan
+        
+        # adding to BankStatement table
+        create_bankstatement(account, 'Received', 'Loan', amount_request)
 
         # Getting installment information
         number = get_random_number(8)
@@ -316,9 +321,17 @@ class CardViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
-
     permission_classes = [CustomerGetPostPatch]
+
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return TransactionPostPatchSerializer
+        elif self.request.method in 'GET':
+            return TransactionGetSerializer
+
+    def create(self, request):
+        ...
 
 
 class BankStatementViewSet(viewsets.ModelViewSet):
@@ -326,6 +339,21 @@ class BankStatementViewSet(viewsets.ModelViewSet):
     serializer_class = BankStatementSerializer
 
     permission_classes = [CustomerGetPostPatch]
+
+
+def create_bankstatement(account, action, source, amount):
+    if action == 'Received':
+        account.balance += amount 
+    elif action == 'Sent':
+        account.balance -= amount
+
+    bankstatement = BankStatement.objects.create(
+        account = account,
+        transaction_action = action,
+        source = source,
+        amount = amount,
+        account_balance = account.balance
+    )
 
 
 def get_random_number(length):
