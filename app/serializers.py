@@ -262,7 +262,7 @@ class InstallmentPatchSerializer(serializers.ModelSerializer):
 
 
 # CARD
-class CardSerializer(serializers.ModelSerializer):
+class CardGetSerializer(serializers.ModelSerializer):
 
     transactions = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True)
@@ -277,6 +277,18 @@ class CardSerializer(serializers.ModelSerializer):
             'expiration_date',
             'is_active',
             'transactions'
+        ]
+
+
+class CardPostPatchSerializer(serializers.ModelSerializer):
+
+    transactions = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=True)
+
+    class Meta:
+        model = Card
+        fields = [
+            'id_account'
         ]
 
 

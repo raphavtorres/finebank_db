@@ -120,9 +120,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         # account parameters
         acc_number = get_random_number(8)
         agency = '4242'
-        acc_type = request.data.get('acc_type')
-        print(acc_type)  # POUPANÇA / CORRENTE
-        credit_limit = 800.00
+        acc_type = request.data.get('acc_type')  # POUPANÇA / CORRENTE
+        credit_limit = random.choice([200, 400, 600, 800])
+        balance = random.choice([500, 1000, 2000, 3000])
         customer = self.request.user.pk
 
         # card parameters
@@ -137,6 +137,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             agency=agency,
             acc_type=acc_type,
             credit_limit=credit_limit,
+            balance=balance,
             is_active=True
         )
         account.customer.add(customer)
@@ -239,7 +240,7 @@ class LoanViewSet(viewsets.ModelViewSet):
 
         # Getting installment information
         number = get_random_number(8)
-        payment_amount = amount_request / installment_amount
+        payment_amount = round((amount_request / installment_amount), 2)
 
         # margem consignável
         consignable_margin = account.balance * Decimal(0.40)
@@ -275,9 +276,38 @@ class InstallmentViewSet(viewsets.ModelViewSet):
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
-    serializer_class = CardSerializer
+    # permission_classes = [CustomerGetPostPatch]
 
-    permission_classes = [CustomerGetPostPatch]
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return CardPostPatchSerializer
+        elif self.request.method in 'GET':
+            return CardGetSerializer
+
+    def create(self, request):
+        # getting account
+        id_account = request.data.get('id_account')
+        account = get_object_or_404(Account, pk=id_account)
+
+        if account.credit_limit > 500:
+            # card parameters
+            card_number = get_random_number(16)
+            verification_code = get_random_number(3)
+            flag = random.choice(["MasterCard", "Visa", "Elo"])
+            expiration_date = datetime.now() + timedelta(days=365*5)
+
+            # creating card
+            card = Card.objects.create(
+                account=account,
+                number=card_number,
+                verification_code=verification_code,
+                flag=flag,
+                expiration_date=expiration_date,
+                is_active=True
+            )
+
+            return Response({'status': 'Card Succesfully Created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Not eligible to receive the card'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):

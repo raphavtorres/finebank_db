@@ -106,5 +106,9 @@ py populate.py
 Only Get
 
 # Card
-
+```json
+{
+	"id_account": 1
+}
+```
 # Transaction

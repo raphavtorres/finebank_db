@@ -48,7 +48,10 @@ from app.serializers import (
     LoanPostPatchSerializer,
 
     InstallmentPostGetSerializer,
-    CardSerializer,
+
+    CardGetSerializer,
+    CardPostPatchSerializer,
+
     TransactionSerializer,
 )
 

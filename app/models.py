@@ -156,7 +156,7 @@ class Account(Base):
     agency = models.CharField(max_length=8)
     acc_type = models.CharField(choices=OPTIONS, max_length=9)
     credit_limit = models.DecimalField(max_digits=9, decimal_places=2)
-    balance = models.DecimalField(decimal_places=2, max_digits=9, default=0)
+    balance = models.DecimalField(decimal_places=2, max_digits=9)
     is_active = models.BooleanField(default=True)
 
     class Meta:
