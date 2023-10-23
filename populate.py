@@ -215,6 +215,8 @@ def main():
 
     # CREATE TRANSACTION
 
+    # CREATE BANKSTATEMENT
+
 
 if __name__ == '__main__':
     main()

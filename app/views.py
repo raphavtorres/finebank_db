@@ -178,29 +178,33 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
 
         # getting info for AccountInvestment based on the Investment received
         id_account = request.data.get('id_account')
-        id_account = get_object_or_404(Account, pk=id_account)
+        account = get_object_or_404(Account, pk=id_account)
 
-        investment_type = investment.investment_type
-        contribution = investment.contribution
-        income = 0.00
-        admin_fee = investment.admin_fee
-        period = investment.period
-        risc_rate = investment.risc_rate
-        profitability = investment.profitability
+        if account.balance >= investment.contribution:
+            account.balance -= investment.contribution
 
-        # creating AccountInvestment
-        AccountInvestment.objects.create(
-            id_account=id_account,
-            investment_type=investment_type,
-            contribution=contribution,
-            income=income,
-            admin_fee=admin_fee,
-            period=period,
-            risc_rate=risc_rate,
-            profitability=profitability
-        )
+            investment_type = investment.investment_type
+            contribution = investment.contribution
+            income = 0.00
+            admin_fee = investment.admin_fee
+            period = investment.period
+            risc_rate = investment.risc_rate
+            profitability = investment.profitability
 
-        return Response({'status': 'Account Investment Succesfully Created'}, status=status.HTTP_201_CREATED)
+            # creating AccountInvestment
+            AccountInvestment.objects.create(
+                id_account=account,
+                investment_type=investment_type,
+                contribution=contribution,
+                income=income,
+                admin_fee=admin_fee,
+                period=period,
+                risc_rate=risc_rate,
+                profitability=profitability
+            )
+
+            return Response({'status': 'Account Investment Succesfully Created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Not eligible to make the investment'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class LoanViewSet(viewsets.ModelViewSet):
@@ -313,6 +317,13 @@ class CardViewSet(viewsets.ModelViewSet):
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+
+    permission_classes = [CustomerGetPostPatch]
+
+
+class BankStatementViewSet(viewsets.ModelViewSet):
+    queryset = BankStatement.objects.all()
+    serializer_class = BankStatementSerializer
 
     permission_classes = [CustomerGetPostPatch]
 

@@ -303,3 +303,12 @@ class TransactionSerializer(serializers.ModelSerializer):
             'transaction_type',
             'timestamp'
         ]
+
+# BANKSTATEMENT
+
+
+class BankStatement(serializers.ModelSerializer):
+
+    class Meta:
+        model = BankStatement
+        fields = []

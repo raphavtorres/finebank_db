@@ -284,3 +284,21 @@ class Transaction(Base):
 
     def __str__(self):
         return f'{self.transaction_type}'
+
+
+class BankStatement(Base):
+    OPTIONS = [
+        ('Received', 'Received'),
+        ('Sent', 'Sent')
+    ]
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    transaction_action = models.CharField(choices=OPTIONS, max_length=6)
+    amount = models.FloatField()
+    account_balance = models.DecimalField(decimal_places=2, max_digits=9)
+
+    class Meta:
+        verbose_name = 'BankStatement'
+        verbose_name_plural = 'BankStatements'
+
+    def __str__(self):
+        return f'{self.transaction_action}'
