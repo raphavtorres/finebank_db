@@ -30,7 +30,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
         )
 
         # creating user type naturalperson
-        natural_person = NaturalPerson.objects.create(
+        NaturalPerson.objects.create(
             customer=customer,
             name=name,
             birthdate=birthdate,
@@ -72,7 +72,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
         )
 
         # creating user type legalperson
-        legal_person = LegalPerson.objects.create(
+        LegalPerson.objects.create(
             customer=customer,
             cnpj=str(cnpj),
             fantasy_name=fantasy_name,
@@ -143,7 +143,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         account.customer.add(customer)
 
         # creating card
-        card = Card.objects.create(
+        Card.objects.create(
             account=account,
             number=card_number,
             verification_code=verification_code,
@@ -206,7 +206,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
             )
 
             return Response({'status': 'Account Investment Succesfully Created'}, status=status.HTTP_201_CREATED)
-        return Response({'status': 'Not eligible to make the investment'}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'status': 'Not enough balance to make the investment'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class LoanViewSet(viewsets.ModelViewSet):
@@ -243,7 +243,7 @@ class LoanViewSet(viewsets.ModelViewSet):
                 observation=observation
             )
             return loan
-        
+
         # adding to BankStatement table
         create_bankstatement(account, 'Received', 'Loan', amount_request)
 
@@ -278,9 +278,48 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 class InstallmentViewSet(viewsets.ModelViewSet):
     queryset = Installment.objects.all()
-    serializer_class = InstallmentPostGetSerializer
+    # permission_classes = [CustomerGetPermission]
 
-    permission_classes = [CustomerGetPermission]
+    def get_serializer_class(self):
+        print(self.request.method)
+        if self.request.method in 'POST GET':
+            return InstallmentPostGetSerializer
+        elif self.request.method in 'PATCH':
+            return InstallmentPatchSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        # getting information to installment
+        id_loan = request.data.get('id_loan')
+        loan = get_object_or_404(Loan, pk=id_loan)
+
+        related_installments = Installment.objects.filter(loan=loan)
+        account = loan.id_account
+
+        # iterating installments to find a non paid
+        for installment_for in related_installments:
+            if not installment_for.is_paid:
+                amount = installment_for.payment_amount
+                installment = installment_for
+                break
+
+        # testing if account has enough balance to pay
+        if account.balance > amount:
+            # saving payment in BankStatement
+            create_bankstatement(account, 'Sent', 'Installment', amount)
+            # updating installment fields
+            installment.is_paid = True
+            installment.payment_date = datetime.now()
+            installment.save()
+
+            # updating loan fields
+            loan.paid_installment_amount += 1
+            # testing if all loan installments are paid
+            if loan.installment_amount == loan.paid_installment_amount:
+                loan.is_payout = True
+            loan.save()
+
+            return Response({'status': 'Installment Succesfully Paid'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Not enough balance to pay the installment'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class CardViewSet(viewsets.ModelViewSet):
@@ -306,7 +345,7 @@ class CardViewSet(viewsets.ModelViewSet):
             expiration_date = datetime.now() + timedelta(days=365*5)
 
             # creating card
-            card = Card.objects.create(
+            Card.objects.create(
                 account=account,
                 number=card_number,
                 verification_code=verification_code,
@@ -321,8 +360,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    permission_classes = [CustomerGetPostPatch]
-
+    # permission_classes = [CustomerGetPostPatch]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -331,7 +369,37 @@ class TransactionViewSet(viewsets.ModelViewSet):
             return TransactionGetSerializer
 
     def create(self, request):
-        ...
+        # getting receiver account
+        id_receiver = request.data.get('id_receiver')
+        receiver = get_object_or_404(Account, pk=id_receiver)
+
+        # getting transaction info from serializer
+        id_card = request.data.get('id_card')
+        card = get_object_or_404(Card, pk=id_card)
+        amount = request.data.get('amount')
+        transaction_type = request.data.get('transaction_type')
+
+        # getting account instance from card fk
+        account = card.account
+
+        # testing user balance to accept transaction
+        if account.balance > amount:
+
+            # creating transaction
+            Transaction.objects.create(
+                card=card,
+                amount=amount,
+                receiver_acc_number=receiver,
+                transaction_type=transaction_type
+            )
+
+            # saving transaction in BankStatement to Sender
+            create_bankstatement(account, 'Sent', 'Transaction', amount)
+            # saving transaction in BankStatement to Receiver
+            create_bankstatement(receiver, 'Received', 'Transaction', amount)
+
+            return Response({'status': 'Transaction Succesfully Created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Not enough balance to make the transaction'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class BankStatementViewSet(viewsets.ModelViewSet):
@@ -343,16 +411,18 @@ class BankStatementViewSet(viewsets.ModelViewSet):
 
 def create_bankstatement(account, action, source, amount):
     if action == 'Received':
-        account.balance += amount 
+        account.balance += amount
     elif action == 'Sent':
         account.balance -= amount
 
-    bankstatement = BankStatement.objects.create(
-        account = account,
-        transaction_action = action,
-        source = source,
-        amount = amount,
-        account_balance = account.balance
+    account.save()
+
+    BankStatement.objects.create(
+        account=account,
+        transaction_action=action,
+        source=source,
+        amount=amount,
+        account_balance=account.balance
     )
 
 

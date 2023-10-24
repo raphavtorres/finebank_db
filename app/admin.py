@@ -104,11 +104,13 @@ class CardAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'card', 'amount', 'transaction_type', 'timestamp']
+    list_display = ['id', 'card', 'amount',
+                    'receiver_acc_number', 'transaction_type', 'timestamp']
     ordering = ['id']
 
 
 @admin.register(BankStatement)
 class BankStatementAdmin(admin.ModelAdmin):
-    list_display = ['id', 'account', 'transaction_action', 'source', 'amount', 'account_balance']
+    list_display = ['id', 'account', 'transaction_action',
+                    'source', 'amount', 'account_balance']
     ordering = ['id']

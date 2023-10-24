@@ -146,6 +146,17 @@ def create_card(id_account):
     return response.json()
 
 
+def create_transaction(id_card, id_receiver, amount, transaction_type):
+    response = requests.post(transactions_url,
+                             json={
+                                 "id_card": id_card,
+                                 "id_receiver": id_receiver,
+                                 "amount": amount,
+                                 "transaction_type": transaction_type
+                             })
+    return response.json()
+
+
 def main():
     # HEADERS = create_header()
 
@@ -204,9 +215,9 @@ def main():
 
     # CREATE LOAN
     print(create_loan(1, 700, interest_rate=0.05,
-          is_payout=False, installment_amount=3, observation=""))
+          is_payout=False, installment_amount=3, observation="comprar um celular"))
     print(create_loan(2, 200, interest_rate=0.03,
-          is_payout=False, installment_amount=2, observation=""))
+          is_payout=False, installment_amount=2, observation="comprar um carro"))
 
     # CREATE CARD
     print(create_card(id_account=1))
@@ -214,8 +225,10 @@ def main():
     print(create_card(id_account=2))
 
     # CREATE TRANSACTION
-
-    # CREATE BANKSTATEMENT
+    print(create_transaction(id_card=2, id_receiver=1,
+          amount=30, transaction_type="Credit"))
+    print(create_transaction(id_card=2, id_receiver=1,
+          amount=2000, transaction_type="Debit"))
 
 
 if __name__ == '__main__':

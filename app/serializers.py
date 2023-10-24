@@ -256,8 +256,7 @@ class InstallmentPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Installment
         fields = [
-            'payment_date',
-            'is_paid'
+            'id_loan'
         ]
 
 
@@ -300,6 +299,7 @@ class TransactionGetSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'card',
+            'id_receiver',
             'amount',
             'transaction_type',
             'timestamp'
@@ -311,9 +311,10 @@ class TransactionPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            'card',
+            'id_card',
+            'id_receiver',
             'amount',
-            'transaction_type',
+            'transaction_type'
         ]
 
 

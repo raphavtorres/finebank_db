@@ -184,7 +184,8 @@ class InvestmentBase(Base):
     ]
 
     investment_type = models.CharField(choices=OPTIONS, max_length=50)
-    contribution =  models.DecimalField(max_digits=9, decimal_places=2)  # valor do investimento
+    contribution = models.DecimalField(
+        max_digits=9, decimal_places=2)  # valor do investimento
     admin_fee = models.FloatField()  # IR
     period = models.DateField()  # data de vencimento
     risc_rate = models.CharField(
@@ -204,7 +205,8 @@ class Investment(InvestmentBase):
 
 class AccountInvestment(InvestmentBase):
     id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    income = models.FloatField()  # quanto rendeu
+    income = models.DecimalField(
+        max_digits=7, decimal_places=2)  # quanto rendeu
 
     class Meta:
         verbose_name = 'Account Investment'
@@ -216,13 +218,17 @@ class AccountInvestment(InvestmentBase):
 
 class Loan(Base):
     id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    amount_request = models.FloatField()
+    amount_request = models.DecimalField(max_digits=7, decimal_places=2)
     interest_rate = models.FloatField()
     is_payout = models.BooleanField()
     installment_amount = models.IntegerField(default=1,
                                              validators=[
                                                  MaxValueValidator(10)
                                              ])
+    paid_installment_amount = models.IntegerField(default=0,
+                                                  validators=[
+                                                      MaxValueValidator(10)
+                                                  ])
     request_date = models.DateTimeField(auto_now_add=True)
     approval_date = models.DateField()
     is_approved = models.BooleanField(default=False)
@@ -239,7 +245,7 @@ class Loan(Base):
 class Installment(Base):
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
     number = models.CharField(max_length=8)
-    payment_amount = models.FloatField()
+    payment_amount = models.DecimalField(max_digits=7, decimal_places=2)
     payment_date = models.DateField(null=True, blank=True)
     expiration_date = models.DateField()
     is_paid = models.BooleanField(default=False)
@@ -274,9 +280,10 @@ class Transaction(Base):
         ('Debit', 'Debit')
     ]
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    receiver_acc_number = models.CharField(max_length=8)
     transaction_type = models.CharField(choices=OPTIONS, max_length=6)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Transaction'

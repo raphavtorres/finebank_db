@@ -124,5 +124,11 @@ Only Get and Patch to pay
 ```
 
 # Transaction
-
-# BankStatement
+```json
+{
+	"id_card": 2,
+	"id_receiver": 1,
+	"amount": 20,
+	"transaction_type": "Credit"
+}
+```
