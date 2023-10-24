@@ -4,7 +4,7 @@ from .imports.views import *
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     queryset = NaturalPerson.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -45,7 +45,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
     queryset = LegalPerson.objects.all()
-    # permission_classes = []
+    permission_classes = [CustomerGetPostPatch]
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -89,26 +89,26 @@ class EmailViewSet(viewsets.ModelViewSet):
     queryset = Email.objects.all()
     serializer_class = EmailSerializer
 
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
     queryset = Phone.objects.all()
     serializer_class = PhoneSerializer
 
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
 
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -157,13 +157,13 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
-    # permission_classes = [CustomerGetPermission]
+    permission_classes = [CustomerGetPermission]
     serializer_class = InvestmentSerializer
 
 
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
     queryset = AccountInvestment.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatch]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
