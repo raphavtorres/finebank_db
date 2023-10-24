@@ -275,25 +275,15 @@ class LoanViewSet(viewsets.ModelViewSet):
         create_loan(False)
         return Response({'status': 'Not eligible to receive the loan'}, status=status.HTTP_403_FORBIDDEN)
 
-
-class InstallmentViewSet(viewsets.ModelViewSet):
-    queryset = Installment.objects.all()
-    # permission_classes = [CustomerGetPermission]
-
-    def get_serializer_class(self):
-        print(self.request.method)
-        if self.request.method in 'POST GET':
-            return InstallmentPostGetSerializer
-        elif self.request.method in 'PATCH':
-            return InstallmentPatchSerializer
-
+    # Updates installments 'is_paid' and loan 'is_payout'
     def partial_update(self, request, *args, **kwargs):
         # getting information to installment
-        id_loan = request.data.get('id_loan')
-        loan = get_object_or_404(Loan, pk=id_loan)
+        loan = self.get_object()
 
         related_installments = Installment.objects.filter(loan=loan)
         account = loan.id_account
+
+        amount = 0
 
         # iterating installments to find a non paid
         for installment_for in related_installments:
@@ -301,6 +291,9 @@ class InstallmentViewSet(viewsets.ModelViewSet):
                 amount = installment_for.payment_amount
                 installment = installment_for
                 break
+
+        if amount == 0:
+            return Response({'status': 'No installments left to pay, loan is payout'}, status=status.HTTP_201_CREATED)
 
         # testing if account has enough balance to pay
         if account.balance > amount:
@@ -320,6 +313,12 @@ class InstallmentViewSet(viewsets.ModelViewSet):
 
             return Response({'status': 'Installment Succesfully Paid'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'Not enough balance to pay the installment'}, status=status.HTTP_403_FORBIDDEN)
+
+
+class InstallmentViewSet(viewsets.ModelViewSet):
+    queryset = Installment.objects.all()
+    serializer_class = InstallmentSerializer
+    # permission_classes = [CustomerGetPermission]
 
 
 class CardViewSet(viewsets.ModelViewSet):

@@ -237,7 +237,7 @@ class LoanPostPatchSerializer(serializers.ModelSerializer):
 
 
 # INSTALLMENT
-class InstallmentPostGetSerializer(serializers.ModelSerializer):
+class InstallmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Installment
@@ -248,15 +248,6 @@ class InstallmentPostGetSerializer(serializers.ModelSerializer):
             'payment_date',
             'expiration_date',
             'is_paid'
-        ]
-
-
-class InstallmentPatchSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Installment
-        fields = [
-            'id_loan'
         ]
 
 

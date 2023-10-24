@@ -100,6 +100,11 @@ py populate.py
 
 # Loan
 
+#### Patch
+"http://127.0.0.1:8000/api/v1/loans/<loan_id>/"
+
+#### Post
+
 ```json
 {
   "id_account": 1,
@@ -113,7 +118,7 @@ py populate.py
 
 # Installment
 
-Only Get and Patch to pay
+Only Get
 
 # Card
 
@@ -124,6 +129,7 @@ Only Get and Patch to pay
 ```
 
 # Transaction
+
 ```json
 {
 	"id_card": 2,
