@@ -10,25 +10,17 @@ class SuperUserPermission(permissions.BasePermission):
 
 class CustomerGetPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return customer_get_permission(request, 'GET')
+        return get_customer_permission(request, 'GET')
 
 
 class CustomerPostPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return customer_get_permission(request, 'POST')
+        return get_customer_permission(request, 'POST')
 
 
 class CustomerGetPostPatch(permissions.BasePermission):
     def has_permission(self, request, view):
-        return customer_get_permission(request, 'GET POST PUT PATCH')
-        # if request.user.is_superuser:
-        #     return True
-
-        # if request.method in 'GET POST PUT':
-        #     if request.user.is_authenticated:
-        #         return True
-        #     return False
-        # return False
+        return get_customer_permission(request, 'GET POST PUT PATCH')
 
 
 class DeletePermission(permissions.BasePermission):
@@ -40,7 +32,7 @@ class DeletePermission(permissions.BasePermission):
         return True
 
 
-def customer_get_permission(request, methods):
+def get_customer_permission(request, methods):
     if request.user.is_superuser:
         return True
 

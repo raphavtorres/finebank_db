@@ -6,6 +6,26 @@ py manage.py createsuperuser
 py manage.py runserver
 py populate.py
 
+
+# JWT
+http://127.0.0.1:8000/api/v1/auth/jwt/create/
+```json
+{
+	"register_number": 123,
+	"password": "123"
+}
+```
+
+#### Returns tokens
+```json
+{
+	"refresh": "...",
+	"access": "..."
+}
+```
+
+All methods require Authorization - "Bearer <jwt>"
+
 # LegalPerson
 
 ```json

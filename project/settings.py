@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+from app.permissions import CustomerPostPermission
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -159,18 +161,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        # ANONYMOUS - JUST READ
-        # AUTHENTICATED - ALL
-        'rest_framework.permissions.AllowAny'
-        # 'rest_framework.permissions.IsAuthenticated'
+        # 'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
         # 'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ],
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 2,
     'DEFAULT_THROTTLE_CLASSES': [
         # ANONYMOUS THROTTLE
         'rest_framework.throttling.AnonRateThrottle',
@@ -180,17 +177,25 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/minute',  # second, day, month, year
         'user': '100/minute'
-    }
+    },
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 2,
+}
+
+# DJOSER CONFIGS
+DJOSER = {
+    'PERMISSIONS': {
+        'user_list': [CustomerPostPermission],
+    },
 }
 
 # JWT
-# https://djoser.readthedocs.io/en/latest/settings.html
-# SIMPLE_JWT = {
-#     # 'USER_ID_FIELD': 'edv',
-#     'AUTH_HEADERS_TYPES': ['Bearer'],
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
-# }
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'register_number',
+    'AUTH_HEADERS_TYPES': ['Bearer'],
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+}
 
 # ADMIN PAGE DESIGN
 JAZZMIN_SETTINGS = {
@@ -199,7 +204,6 @@ JAZZMIN_SETTINGS = {
     "site_header": "FineBank",
     "site_brand": "FineBank",
     "copyright": "https://github.com/raphavtorres",
-    # "site_logo": "images/logo2.svg",
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -223,7 +227,6 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
     "theme": "cyborg",
-    # "theme": "solar",
     "dark_mode_theme": 'darkly',
     "button_classes": {
         "primary": "btn-primary",
