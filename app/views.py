@@ -178,9 +178,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        customer = self.request.user
-        account = self.request.query_params.get('account')
-        return account_info_filter(AccountInvestment, account, customer)
+        return filter_by_account(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -228,6 +226,9 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return filter_by_account(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -332,14 +333,18 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 
 class InstallmentViewSet(viewsets.ModelViewSet):
-    queryset = Installment.objects.all()
     serializer_class = InstallmentSerializer
     permission_classes = [CustomerGetPermission]
 
+    def get_queryset(self):
+        return filter_by_account(self)
+
 
 class CardViewSet(viewsets.ModelViewSet):
-    queryset = Card.objects.all()
     permission_classes = [CustomerGetPostPermission]
+
+    def get_queryset(self):
+        return filter_by_account(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -374,8 +379,10 @@ class CardViewSet(viewsets.ModelViewSet):
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
     permission_classes = [CustomerGetPostPermission]
+
+    def get_queryset(self):
+        return filter_by_account(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -418,12 +425,15 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
 
 class BankStatementViewSet(viewsets.ModelViewSet):
-    queryset = BankStatement.objects.all()
     serializer_class = BankStatementSerializer
 
     permission_classes = [CustomerGetPermission]
 
+    def get_queryset(self):
+        return filter_by_account(self)
 
+
+# Functions
 def create_bankstatement(account, action, source, amount):
     if action == 'Received':
         account.balance += amount
@@ -440,6 +450,12 @@ def create_bankstatement(account, action, source, amount):
         account_balance=account.balance
     )
 
+
+def filter_by_account(self):
+    customer = self.request.user
+    account = self.request.query_params.get('account')
+    return account_info_filter(AccountInvestment, account, customer)
+    
 
 def get_random_number(length):
     return ''.join(random.choice('0123456789') for _ in range(0, length))

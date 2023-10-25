@@ -1,22 +1,32 @@
 # finebank_db
-
+```cmd
 py manage.py makemigrations
 py manage.py migrate
 py manage.py createsuperuser
 py manage.py runserver
 py populate.py
+```
 
 
-# JWT
+
+## JWT
+```txt
 http://127.0.0.1:8000/api/v1/auth/jwt/create/
+```
+### POST
 ```json
 {
-	"register_number": 123,
+  "register_number": 123,
 	"password": "123"
 }
 ```
 
+
 #### Returns tokens
+```txt
+All methods require Authorization - "Bearer <jwt>"
+```
+
 ```json
 {
 	"refresh": "...",
@@ -24,10 +34,9 @@ http://127.0.0.1:8000/api/v1/auth/jwt/create/
 }
 ```
 
-All methods require Authorization - "Bearer <jwt>"
 
-# LegalPerson
-
+## LegalPerson
+### POST
 ```json
 {
   "cnpj": "",
@@ -40,8 +49,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# NaturalPerson
 
+## NaturalPerson
+### POST
 ```json
 {
   "cpf": "",
@@ -53,8 +63,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Email
 
+## Email
+### POST
 ```json
 {
   "email": "name@example.com",
@@ -62,8 +73,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Phone
 
+## Phone
+### POST
 ```json
 {
   "phone": "00000000",
@@ -73,8 +85,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Address
 
+## Address
+### POST
 ```json
 {
   "neighborhood": "",
@@ -87,8 +100,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Account
 
+## Account
+### POST
 ```json
 {
   "acc_type": "checking | savings",
@@ -96,8 +110,9 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Investment
 
+## Investment
+### POST
 ```json
 {
   "investment_type": "Tesouro Direto",
@@ -109,8 +124,15 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# AccountInvestment
 
+## AccountInvestment
+
+### GET
+```txt
+http://127.0.0.1:8000/api/v1/account-investments/?account=1
+```
+
+### POST
 ```json
 {
   "id_investment": 1,
@@ -118,13 +140,15 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Loan
 
-#### Patch
+## Loan
+
+### PATCH
+```txt
 "http://127.0.0.1:8000/api/v1/loans/<loan_id>/"
+```
 
-#### Post
-
+### POST
 ```json
 {
   "id_account": 1,
@@ -136,19 +160,24 @@ All methods require Authorization - "Bearer <jwt>"
 }
 ```
 
-# Installment
 
-Only Get
+## Installment
+### only GET
+```txt
+http://127.0.0.1:8000/api/v1/account-investments/?installment=1
+```
 
-# Card
 
+## Card
+## POST
 ```json
 {
   "id_account": 1
 }
 ```
 
-# Transaction
+
+## Transaction
 
 ```json
 {
