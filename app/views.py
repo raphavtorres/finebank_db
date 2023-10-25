@@ -3,7 +3,6 @@ from .imports.views import *
 
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
-    # queryset = NaturalPerson.objects.all()
     permission_classes = []
 
     def get_queryset(self):
@@ -46,7 +45,6 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
-    # queryset = LegalPerson.objects.all()
     permission_classes = []
 
     def get_queryset(self):
@@ -90,7 +88,6 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
 
 
 class EmailViewSet(viewsets.ModelViewSet):
-    # queryset = Email.objects.all()
     serializer_class = EmailSerializer
     permission_classes = [CustomerGetPostPatchPermission]
 
@@ -99,7 +96,6 @@ class EmailViewSet(viewsets.ModelViewSet):
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
-    # queryset = Phone.objects.all()
     serializer_class = PhoneSerializer
     permission_classes = [CustomerGetPostPatchPermission]
 
@@ -108,7 +104,6 @@ class PhoneViewSet(viewsets.ModelViewSet):
 
 
 class AddressViewSet(viewsets.ModelViewSet):
-    # queryset = Address.objects.all()
     serializer_class = AddressSerializer
     permission_classes = [CustomerGetPostPatchPermission]
 
@@ -117,7 +112,6 @@ class AddressViewSet(viewsets.ModelViewSet):
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-    # queryset = Account.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
