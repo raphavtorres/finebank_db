@@ -179,9 +179,9 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        user = self.request.user
+        customer = self.request.user
         account = self.request.query_params.get('account')
-        return account_info_filter(AccountInvestment, account, user)
+        return account_info_filter(AccountInvestment, account, customer)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -424,11 +424,6 @@ class BankStatementViewSet(viewsets.ModelViewSet):
 
     permission_classes = [CustomerGetPermission]
 
-
-# def define_queryset():
-
-#     def get_queryset(self):
-#         return super().get_queryset()
 
 def create_bankstatement(account, action, source, amount):
     if action == 'Received':
