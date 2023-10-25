@@ -17,7 +17,7 @@ http://127.0.0.1:8000/api/v1/auth/jwt/create/
 ```json
 {
   "register_number": 123,
-	"password": "123"
+  "password": "123"
 }
 ```
 
