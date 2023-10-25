@@ -29,8 +29,8 @@ All methods require Authorization - "Bearer <jwt>"
 
 ```json
 {
-	"refresh": "...",
-	"access": "..."
+  "refresh": "...",
+  "access": "..."
 }
 ```
 
