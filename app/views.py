@@ -175,7 +175,6 @@ class InvestmentViewSet(viewsets.ModelViewSet):
 
 
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
-    queryset = AccountInvestment.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
