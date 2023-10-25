@@ -3,8 +3,11 @@ from .imports.views import *
 
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
-    queryset = NaturalPerson.objects.all()
+    # queryset = NaturalPerson.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(NaturalPerson, self.request.user)
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -44,8 +47,11 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
-    queryset = LegalPerson.objects.all()
+    # queryset = LegalPerson.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(LegalPerson, self.request.user)
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -86,29 +92,38 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
 
 
 class EmailViewSet(viewsets.ModelViewSet):
-    queryset = Email.objects.all()
+    # queryset = Email.objects.all()
     serializer_class = EmailSerializer
-
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(Email, self.request.user)
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
-    queryset = Phone.objects.all()
+    # queryset = Phone.objects.all()
     serializer_class = PhoneSerializer
-
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(Phone, self.request.user)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
-    queryset = Address.objects.all()
+    # queryset = Address.objects.all()
     serializer_class = AddressSerializer
-
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(Address, self.request.user)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
-    queryset = Account.objects.all()
+    # queryset = Account.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        return user_info_filter(Account, self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -164,6 +179,11 @@ class InvestmentViewSet(viewsets.ModelViewSet):
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
     queryset = AccountInvestment.objects.all()
     permission_classes = [CustomerGetPostPatchPermission]
+
+    def get_queryset(self):
+        user = self.request.user
+        account = self.request.query_params.get('account')
+        return account_info_filter(AccountInvestment, account, user)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
