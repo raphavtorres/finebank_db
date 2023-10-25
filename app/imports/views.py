@@ -61,9 +61,10 @@ from app.serializers import (
 )
 
 from app.permissions import (
-    CustomerGetPostPatch,
     CustomerGetPermission,
-    # SuperUserPermission,
-    # CustomerPostPermission,
-    # DeletePermission,
+    CustomerPostPermission,
+    CustomerGetPostPatchPermission,
+    SuperUserPermission,
+    CustomerPostPermission,
+    DeletePermission,
 )

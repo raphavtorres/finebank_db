@@ -4,7 +4,7 @@ from .imports.views import *
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     queryset = NaturalPerson.objects.all()
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -45,7 +45,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
     queryset = LegalPerson.objects.all()
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -89,26 +89,26 @@ class EmailViewSet(viewsets.ModelViewSet):
     queryset = Email.objects.all()
     serializer_class = EmailSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
     queryset = Phone.objects.all()
     serializer_class = PhoneSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -163,7 +163,7 @@ class InvestmentViewSet(viewsets.ModelViewSet):
 
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
     queryset = AccountInvestment.objects.all()
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -181,7 +181,6 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
         account = get_object_or_404(Account, pk=id_account)
 
         if account.balance >= investment.contribution:
-            # account.balance -= investment.contribution
             investment_type = investment.investment_type
             contribution = investment.contribution
             income = 0.00
@@ -211,7 +210,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
 
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPostPatchPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -318,12 +317,12 @@ class LoanViewSet(viewsets.ModelViewSet):
 class InstallmentViewSet(viewsets.ModelViewSet):
     queryset = Installment.objects.all()
     serializer_class = InstallmentSerializer
-    # permission_classes = [CustomerGetPermission]
+    permission_classes = [CustomerGetPermission]
 
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPermission, CustomerPostPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -359,7 +358,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    # permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPermission, CustomerPostPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -405,7 +404,7 @@ class BankStatementViewSet(viewsets.ModelViewSet):
     queryset = BankStatement.objects.all()
     serializer_class = BankStatementSerializer
 
-    permission_classes = [CustomerGetPostPatch]
+    permission_classes = [CustomerGetPermission]
 
 
 def create_bankstatement(account, action, source, amount):

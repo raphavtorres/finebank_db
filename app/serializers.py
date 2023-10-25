@@ -272,9 +272,6 @@ class CardGetSerializer(serializers.ModelSerializer):
 
 class CardPostPatchSerializer(serializers.ModelSerializer):
 
-    # transactions = serializers.PrimaryKeyRelatedField(
-    #     many=True, read_only=True)
-
     class Meta:
         model = Card
         fields = [
