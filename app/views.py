@@ -407,6 +407,11 @@ class BankStatementViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPermission]
 
 
+# def define_queryset():
+
+#     def get_queryset(self):
+#         return super().get_queryset()
+
 def create_bankstatement(account, action, source, amount):
     if action == 'Received':
         account.balance += amount
