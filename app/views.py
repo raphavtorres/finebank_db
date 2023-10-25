@@ -4,7 +4,7 @@ from .imports.views import *
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     # queryset = NaturalPerson.objects.all()
-    permission_classes = [CustomerGetPostPatchPermission]
+    permission_classes = []
 
     def get_queryset(self):
         return user_info_filter(NaturalPerson, self.request.user)
@@ -25,9 +25,8 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
         social_name = request.data.get('social_name')
 
         # creating user
-        customer = get_user_model().objects.create(
+        customer = get_user_model().objects.create_user(
             register_number=int(cpf),
-            username=str(cpf),
             password=password,
             picture='picture_path'
         )
@@ -48,7 +47,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 # LEGAL PERSON
 class LegalPersonViewSet(viewsets.ModelViewSet):
     # queryset = LegalPerson.objects.all()
-    permission_classes = [CustomerGetPostPatchPermission]
+    permission_classes = []
 
     def get_queryset(self):
         return user_info_filter(LegalPerson, self.request.user)
@@ -70,9 +69,8 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
         ie = request.data.get('ie')
 
         # creating user
-        customer = get_user_model().objects.create(
+        customer = get_user_model().objects.create_user(
             register_number=int(cnpj),
-            username=str(cnpj),
             password=password,
             picture='picture_path'
         )
@@ -342,7 +340,7 @@ class InstallmentViewSet(viewsets.ModelViewSet):
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
-    permission_classes = [CustomerGetPermission, CustomerPostPermission]
+    permission_classes = [CustomerGetPostPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -378,7 +376,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    permission_classes = [CustomerGetPermission, CustomerPostPermission]
+    permission_classes = [CustomerGetPostPermission]
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
