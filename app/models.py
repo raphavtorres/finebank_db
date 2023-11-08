@@ -113,7 +113,7 @@ class Email(Base):
 
 class Phone(Base):
     customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    phone = models.CharField(max_length=8)
+    phone = models.CharField(max_length=8, unique=True)
     country_code = models.CharField(max_length=3)
     prefix_number = models.CharField(max_length=3)
 
@@ -154,7 +154,8 @@ class Account(Base):
     customer = models.ManyToManyField(get_user_model())
     number = models.CharField(max_length=8)
     agency = models.CharField(max_length=8)
-    acc_type = models.CharField(choices=OPTIONS, max_length=9)
+    acc_type = models.CharField(
+        choices=OPTIONS, max_length=9, blank=False, null=False)
     credit_limit = models.DecimalField(max_digits=9, decimal_places=2)
     balance = models.DecimalField(decimal_places=2, max_digits=9)
     is_active = models.BooleanField(default=True)

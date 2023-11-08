@@ -18,7 +18,7 @@ class AccountGetSerializer(serializers.ModelSerializer):
             'acc_type',  # POUPANÇA / CORRENTE
             'credit_limit',
             'balance',
-            'customers',
+            'customer',
             'investments',
             'loans',
             'cards'
@@ -28,15 +28,10 @@ class AccountGetSerializer(serializers.ModelSerializer):
 # CREATE AND UPDATE ACCOUNT
 class AccountPostPatchSerializer(serializers.ModelSerializer):
 
-    investments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    loans = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    cards = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
     class Meta:
         model = Account
         fields = [
             'acc_type',
-            'balance'
         ]
 
 
@@ -70,7 +65,7 @@ class NaturalPersonPostPatchSerializer(serializers.ModelSerializer):
         model = NaturalPerson
         fields = [
             'cpf',
-            'password'
+            'password',
             'name',
             'birthdate',
             'rg',
@@ -191,7 +186,7 @@ class AccountInvestmentGetSerializer(serializers.ModelSerializer):
         ]
 
 
-class AccountInvestmentPostPatchSerializer(serializers.ModelSerializer):
+class AccountInvestmentPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
         fields = [

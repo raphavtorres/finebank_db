@@ -23,22 +23,26 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
         rg = request.data.get('rg')
         social_name = request.data.get('social_name')
 
-        # creating user
-        customer = get_user_model().objects.create_user(
-            register_number=int(cpf),
-            password=password,
-            picture='picture_path'
-        )
+        try:
+            # creating user
+            customer = get_user_model().objects.create_user(
+                register_number=int(cpf),
+                password=password,
+                picture='picture_path'
+            )
 
-        # creating user type naturalperson
-        NaturalPerson.objects.create(
-            customer=customer,
-            name=name,
-            birthdate=birthdate,
-            cpf=str(cpf),
-            rg=rg,
-            social_name=social_name
-        )
+            # creating user type naturalperson
+            NaturalPerson.objects.create(
+                customer=customer,
+                name=name,
+                birthdate=birthdate,
+                cpf=str(cpf),
+                rg=rg,
+                social_name=social_name
+            )
+
+        except IntegrityError as e:
+            return Response({'status': 'User with this CPF already registered'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'status': 'Natural Person Succesfully Created'}, status=status.HTTP_201_CREATED)
 
@@ -66,23 +70,27 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
         im = request.data.get('im')
         ie = request.data.get('ie')
 
-        # creating user
-        customer = get_user_model().objects.create_user(
-            register_number=int(cnpj),
-            password=password,
-            picture='picture_path'
-        )
+        try:
+            # creating user
+            customer = get_user_model().objects.create_user(
+                register_number=int(cnpj),
+                password=password,
+                picture='picture_path'
+            )
 
-        # creating user type legalperson
-        LegalPerson.objects.create(
-            customer=customer,
-            cnpj=str(cnpj),
-            fantasy_name=fantasy_name,
-            legal_nature=legal_nature,
-            establishment_date=establishment_date,
-            im=im,
-            ie=ie
-        )
+            # creating user type legalperson
+            LegalPerson.objects.create(
+                customer=customer,
+                cnpj=str(cnpj),
+                fantasy_name=fantasy_name,
+                legal_nature=legal_nature,
+                establishment_date=establishment_date,
+                im=im,
+                ie=ie
+            )
+
+        except IntegrityError as e:
+            return Response({'status': 'User with this CNPJ already registered'}, status=status.HTTP_403_FORBIDDEN)
 
         return Response({'status': 'Legal Person Succesfully Created'}, status=status.HTTP_201_CREATED)
 
@@ -132,6 +140,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         balance = random.choice([500, 1000, 2000, 3000])
         customer = self.request.user.pk
 
+        if acc_type not in [option[0] for option in Account.OPTIONS]:
+            return Response({'status': "Invalid account type. Valid values: [checking, savings]"}, status=status.HTTP_403_FORBIDDEN)
+
         # card parameters
         card_number = get_random_number(16)
         verification_code = get_random_number(3)
@@ -169,14 +180,14 @@ class InvestmentViewSet(viewsets.ModelViewSet):
 
 
 class AccountInvestmentViewSet(viewsets.ModelViewSet):
-    permission_classes = [CustomerGetPostPatchPermission]
+    permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
         return filter_by_account(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
-            return AccountInvestmentPostPatchSerializer
+            return AccountInvestmentPostSerializer
         elif self.request.method in 'GET':
             return AccountInvestmentGetSerializer
 
@@ -449,7 +460,7 @@ def filter_by_account(self):
     customer = self.request.user
     account = self.request.query_params.get('account')
     return account_info_filter(AccountInvestment, account, customer)
-    
+
 
 def get_random_number(length):
     return ''.join(random.choice('0123456789') for _ in range(0, length))

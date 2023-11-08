@@ -3,7 +3,10 @@
 py manage.py makemigrations
 py manage.py migrate
 py manage.py createsuperuser
+
 py manage.py runserver 192.168.1.9:8000
+py manage.py runserver 192.168.56.1:8000
+
 py populate.py
 ```
 
@@ -19,6 +22,8 @@ http://127.0.0.1:8000/api/v1/auth/jwt/create/
   "register_number": 123,
   "password": "123"
 }
+
+
 ```
 
 
@@ -105,14 +110,13 @@ All methods require Authorization - "Bearer <jwt>"
 ### POST
 ```json
 {
-  "acc_type": "checking | savings",
-  "balance": 0
+  "acc_type": "checking | savings"
 }
 ```
 
 
 ## Investment
-### POST
+### POST (only superuser)
 ```json
 {
   "investment_type": "Tesouro Direto",
