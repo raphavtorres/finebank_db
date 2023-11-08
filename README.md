@@ -4,8 +4,7 @@ py manage.py makemigrations
 py manage.py migrate
 py manage.py createsuperuser
 
-py manage.py runserver 192.168.1.9:8000
-py manage.py runserver 192.168.56.1:8000
+py manage.py runserver 192.168.155.1:8000
 
 py populate.py
 ```
@@ -146,6 +145,11 @@ http://127.0.0.1:8000/api/v1/account-investments/?account=1
 
 
 ## Loan
+
+### GET
+```txt
+"<base_url>/loans/?account=2"
+```
 
 ### PATCH
 ```txt

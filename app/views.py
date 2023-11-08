@@ -183,7 +183,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, AccountInvestment)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -233,7 +233,7 @@ class LoanViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, Loan)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -266,17 +266,16 @@ class LoanViewSet(viewsets.ModelViewSet):
             )
             return loan
 
-        # adding to BankStatement table
-        create_bankstatement(account, 'Received', 'Loan', amount_request)
-
         # Getting installment information
         number = get_random_number(8)
         payment_amount = round((amount_request / installment_amount), 2)
 
-        # margem consignável
-        consignable_margin = account.balance * Decimal(0.40)
+
         # Approved
-        if consignable_margin > payment_amount:
+        if payment_amount < account.credit_limit * 4:
+            # adding to BankStatement table
+            create_bankstatement(account, 'Received', 'Loan', amount_request)
+
             loan = create_loan(True)
 
             # payment_date
@@ -342,14 +341,14 @@ class InstallmentViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, Installment)
 
 
 class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, Card)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -387,7 +386,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, Transaction)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -435,7 +434,7 @@ class BankStatementViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPermission]
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(self, BankStatement)
 
 
 # Functions
@@ -456,10 +455,10 @@ def create_bankstatement(account, action, source, amount):
     )
 
 
-def filter_by_account(self):
+def filter_by_account(self, model):
     customer = self.request.user
     account = self.request.query_params.get('account')
-    return account_info_filter(AccountInvestment, account, customer)
+    return account_info_filter(model, account, customer)
 
 
 def get_random_number(length):
