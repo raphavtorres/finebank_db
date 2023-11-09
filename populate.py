@@ -3,8 +3,8 @@ import os
 
 
 # BASE_URL = 'http://127.0.0.1:8000/api/v1/'
-# BASE_URL = 'http://192.168.1.9:8000/api/v1/'
-BASE_URL = 'http://192.168.155.1:8000/api/v1/'
+BASE_URL = 'http://192.168.1.9:8000/api/v1/'
+# BASE_URL = 'http://192.168.155.1:8000/api/v1/'
 
 natural_people_url = os.path.join(BASE_URL, 'natural-people/')
 legal_people_url = os.path.join(BASE_URL, 'legal-people/')
@@ -118,19 +118,19 @@ def create_investment(headers, investment_type, contribution, admin_fee, period,
     return response.json()
 
 
-def create_account_investment(headers, id_investment, id_account):
+def create_account_investment(headers, id_investment, account):
     response = requests.post(account_investments_url, headers=headers,
                              json={
                                  "id_investment": id_investment,
-                                 "id_account": id_account
+                                 "account": account
                              })
     return response.json()
 
 
-def create_loan(headers, id_account, amount_request, interest_rate, is_payout, installment_amount, observation):
+def create_loan(headers, account, amount_request, interest_rate, is_payout, installment_amount, observation):
     response = requests.post(loans_url, headers=headers,
                              json={
-                                 "id_account": id_account,
+                                 "account": account,
                                  "amount_request": amount_request,
                                  "interest_rate": interest_rate,
                                  "is_payout": is_payout,
@@ -140,10 +140,10 @@ def create_loan(headers, id_account, amount_request, interest_rate, is_payout, i
     return response.json()
 
 
-def create_card(headers, id_account):
+def create_card(headers, account):
     response = requests.post(cards_url, headers=headers,
                              json={
-                                 "id_account": id_account
+                                 "account": account
                              })
     return response.json()
 
@@ -217,9 +217,9 @@ def main():
 
     # CREATE ACCOUNT INVESTMENT
     print(create_account_investment(
-        header_natural_1, id_investment=1, id_account=2))
+        header_natural_1, id_investment=1, account=2))
     print(create_account_investment(
-        header_natural_1, id_investment=3, id_account=2))
+        header_natural_1, id_investment=3, account=2))
 
     # CREATE LOAN
     print(create_loan(header_natural_1, 1, 700, interest_rate=0.05,
@@ -228,9 +228,9 @@ def main():
           is_payout=False, installment_amount=2, observation="contratar funcionário"))
 
     # CREATE CARD
-    print(create_card(header_natural_1, id_account=1))
-    print(create_card(header_natural_1, id_account=2))
-    print(create_card(header_legal, id_account=2))
+    print(create_card(header_natural_1, account=1))
+    print(create_card(header_natural_1, account=2))
+    print(create_card(header_legal, account=2))
 
     # CREATE TRANSACTION
     print(create_transaction(header_natural_1, id_card=2, id_receiver=1,

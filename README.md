@@ -139,7 +139,7 @@ http://127.0.0.1:8000/api/v1/account-investments/?account=1
 ```json
 {
   "id_investment": 1,
-  "id_account": 2
+  "account": 2
 }
 ```
 
@@ -153,13 +153,13 @@ http://127.0.0.1:8000/api/v1/account-investments/?account=1
 
 ### PATCH
 ```txt
-"http://127.0.0.1:8000/api/v1/loans/<loan_id>/"
+<base_url>/loans/1/?account=1
 ```
 
 ### POST
 ```json
 {
-  "id_account": 1,
+  "account": 1,
   "amount_request": 200,
   "interest_rate": 0.05,
   "is_payout": false,
@@ -167,7 +167,6 @@ http://127.0.0.1:8000/api/v1/account-investments/?account=1
   "observation": ""
 }
 ```
-
 
 ## Installment
 ### only GET
@@ -180,7 +179,7 @@ http://127.0.0.1:8000/api/v1/account-investments/?installment=1
 ## POST
 ```json
 {
-  "id_account": 1
+  "account": 1
 }
 ```
 

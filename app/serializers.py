@@ -175,7 +175,7 @@ class AccountInvestmentGetSerializer(serializers.ModelSerializer):
         model = AccountInvestment
         fields = [
             'id',
-            'id_account',
+            'account',
             'investment_type',
             'contribution',
             'income',
@@ -191,7 +191,7 @@ class AccountInvestmentPostSerializer(serializers.ModelSerializer):
         model = AccountInvestment
         fields = [
             'id_investment',
-            'id_account'
+            'account'
         ]
 
 
@@ -205,7 +205,7 @@ class LoanGetSerializer(serializers.ModelSerializer):
         model = Loan
         fields = [
             'id',
-            'id_account',
+            'account',
             'amount_request',
             'interest_rate',
             'is_payout',
@@ -222,7 +222,7 @@ class LoanPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
         fields = [
-            'id_account',
+            'account',
             'amount_request',
             'interest_rate',
             'is_payout',
@@ -270,7 +270,7 @@ class CardPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = [
-            'id_account'
+            'account'
         ]
 
 

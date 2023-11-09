@@ -76,14 +76,14 @@ class InvestmentAdmin(admin.ModelAdmin):
 
 @admin.register(AccountInvestment)
 class AccountInvestmentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'id_account', 'investment_type', 'contribution',
+    list_display = ['id', 'account', 'investment_type', 'contribution',
                     'income', 'admin_fee', 'period', 'risc_rate', 'profitability']
     ordering = ['id']
 
 
 @admin.register(Loan)
 class LoanAdmin(admin.ModelAdmin):
-    list_display = ['id', 'id_account', 'amount_request', 'interest_rate', 'is_payout',
+    list_display = ['id', 'account', 'amount_request', 'interest_rate', 'is_payout',
                     'installment_amount', 'request_date', 'approval_date', 'is_approved', 'observation']
     ordering = ['id']
 

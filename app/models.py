@@ -205,7 +205,7 @@ class Investment(InvestmentBase):
 
 
 class AccountInvestment(InvestmentBase):
-    id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     income = models.DecimalField(
         max_digits=7, decimal_places=2)  # quanto rendeu
 
@@ -218,7 +218,7 @@ class AccountInvestment(InvestmentBase):
 
 
 class Loan(Base):
-    id_account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     amount_request = models.DecimalField(max_digits=7, decimal_places=2)
     interest_rate = models.FloatField()
     is_payout = models.BooleanField()

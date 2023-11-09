@@ -197,10 +197,10 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
         investment = get_object_or_404(Investment, pk=id_investment)
 
         # getting info for AccountInvestment based on the Investment received
-        id_account = request.data.get('id_account')
-        account = get_object_or_404(Account, pk=id_account)
+        account = request.data.get('account')
+        account_instance = get_object_or_404(Account, pk=account)
 
-        if account.balance >= investment.contribution:
+        if account_instance.balance >= investment.contribution:
             investment_type = investment.investment_type
             contribution = investment.contribution
             income = 0.00
@@ -210,11 +210,12 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
             profitability = investment.profitability
 
             # adding to BankStatement table
-            create_bankstatement(account, 'Sent', 'Investment', contribution)
+            create_bankstatement(account_instance, 'Sent',
+                                 'Investment', contribution)
 
             # creating AccountInvestment
             AccountInvestment.objects.create(
-                id_account=account,
+                account=account_instance,
                 investment_type=investment_type,
                 contribution=contribution,
                 income=income,
@@ -250,12 +251,12 @@ class LoanViewSet(viewsets.ModelViewSet):
         approval_date = datetime.now().strftime('%Y-%m-%d')
         observation = request.data.get('observation')
 
-        id_account = request.data.get('id_account')
-        account = get_object_or_404(Account, pk=id_account)
+        account = request.data.get('account')
+        account_instance = get_object_or_404(Account, pk=account)
 
         def create_loan(is_approved):
             loan = Loan.objects.create(
-                id_account=account,
+                account=account_instance,
                 amount_request=amount_request,
                 interest_rate=interest_rate,
                 is_payout=is_payout,
@@ -270,11 +271,11 @@ class LoanViewSet(viewsets.ModelViewSet):
         number = get_random_number(8)
         payment_amount = round((amount_request / installment_amount), 2)
 
-
         # Approved
-        if payment_amount < account.credit_limit * 4:
+        if payment_amount < account_instance.credit_limit * 4:
             # adding to BankStatement table
-            create_bankstatement(account, 'Received', 'Loan', amount_request)
+            create_bankstatement(
+                account_instance, 'Received', 'Loan', amount_request)
 
             loan = create_loan(True)
 
@@ -302,7 +303,7 @@ class LoanViewSet(viewsets.ModelViewSet):
         loan = self.get_object()
 
         related_installments = Installment.objects.filter(loan=loan)
-        account = loan.id_account
+        account = loan.account
 
         amount = 0
 
@@ -358,10 +359,10 @@ class CardViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         # getting account
-        id_account = request.data.get('id_account')
-        account = get_object_or_404(Account, pk=id_account)
+        account = request.data.get('account')
+        account_instance = get_object_or_404(Account, pk=account)
 
-        if account.credit_limit > 500:
+        if account_instance.credit_limit > 500:
             # card parameters
             card_number = get_random_number(16)
             verification_code = get_random_number(3)
@@ -370,7 +371,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
             # creating card
             Card.objects.create(
-                account=account,
+                account=account_instance,
                 number=card_number,
                 verification_code=verification_code,
                 flag=flag,
