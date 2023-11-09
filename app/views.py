@@ -6,7 +6,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_queryset(self):
-        return user_info_filter(NaturalPerson, self.request.user)
+        return filter_by_user(NaturalPerson, self.request.user)
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -52,7 +52,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_queryset(self):
-        return user_info_filter(LegalPerson, self.request.user)
+        return filter_by_user(LegalPerson, self.request.user)
 
     # testing request HTTP method
     def get_serializer_class(self):
@@ -100,7 +100,7 @@ class EmailViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        return user_info_filter(Email, self.request.user)
+        return filter_by_user(Email, self.request.user)
 
 
 class PhoneViewSet(viewsets.ModelViewSet):
@@ -108,7 +108,7 @@ class PhoneViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        return user_info_filter(Phone, self.request.user)
+        return filter_by_user(Phone, self.request.user)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
@@ -116,14 +116,14 @@ class AddressViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        return user_info_filter(Address, self.request.user)
+        return filter_by_user(Address, self.request.user)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPatchPermission]
 
     def get_queryset(self):
-        return user_info_filter(Account, self.request.user)
+        return filter_by_user(Account, self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -342,14 +342,14 @@ class InstallmentViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPermission]
 
     def get_queryset(self):
-        return filter_by_account(self, Installment)
+        return filter_by_loan(self)
 
 
 class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
-        return filter_by_account(self, Card)
+        return filter_by_card(self)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -384,16 +384,9 @@ class CardViewSet(viewsets.ModelViewSet):
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
-    permission_classes = [CustomerGetPostPermission]
+    permission_classes = [CustomerPostPermission]
 
-    def get_queryset(self):
-        return filter_by_account(self, Transaction)
-
-    def get_serializer_class(self):
-        if self.request.method in 'POST PATCH':
-            return TransactionPostPatchSerializer
-        elif self.request.method in 'GET':
-            return TransactionGetSerializer
+    serializer_class = TransactionSerializer
 
     def create(self, request):
         # getting receiver account
@@ -454,12 +447,6 @@ def create_bankstatement(account, action, source, amount):
         amount=amount,
         account_balance=account.balance
     )
-
-
-def filter_by_account(self, model):
-    customer = self.request.user
-    account = self.request.query_params.get('account')
-    return account_info_filter(model, account, customer)
 
 
 def get_random_number(length):

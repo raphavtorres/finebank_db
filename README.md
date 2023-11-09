@@ -171,12 +171,17 @@ http://127.0.0.1:8000/api/v1/account-investments/?account=1
 ## Installment
 ### only GET
 ```txt
-http://127.0.0.1:8000/api/v1/account-investments/?installment=1
+<base_url>/installments/?loan=1
 ```
 
 
 ## Card
-## POST
+### GET
+```txt
+<base_url>/cards/?account=1
+```
+
+### POST
 ```json
 {
   "account": 1
@@ -193,4 +198,9 @@ http://127.0.0.1:8000/api/v1/account-investments/?installment=1
 	"amount": 20,
 	"transaction_type": "Credit"
 }
+```
+
+## BankStatement
+```txt
+<base_url>/bank-statement/?account=2
 ```

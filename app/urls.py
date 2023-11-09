@@ -17,6 +17,8 @@ router.register('loans', LoanViewSet, basename='loans')
 router.register('installments', InstallmentViewSet, basename='installments')
 router.register('cards', CardViewSet, basename='cards')
 router.register('transactions', TransactionViewSet, basename='transactions')
+router.register('bank-statement', BankStatementViewSet,
+                basename='bank-statement')
 
 
 urlpatterns = []

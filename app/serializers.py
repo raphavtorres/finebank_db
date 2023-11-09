@@ -275,21 +275,20 @@ class CardPostPatchSerializer(serializers.ModelSerializer):
 
 
 # TRANSACTION
-class TransactionGetSerializer(serializers.ModelSerializer):
+# class TransactionGetSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Transaction
-        fields = [
-            'id',
-            'card',
-            'id_receiver',
-            'amount',
-            'transaction_type',
-            'timestamp'
-        ]
+#     class Meta:
+#         model = Transaction
+#         fields = [
+#             'id',
+#             'card',
+#             'id_receiver',
+#             'amount',
+#             'transaction_type',
+#             'timestamp'
+#         ]
 
-
-class TransactionPostPatchSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transaction
@@ -306,4 +305,10 @@ class BankStatementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankStatement
-        fields = []
+        fields = [
+            'account',
+            'transaction_action',
+            'source',
+            'amount',
+            'account_balance'
+        ]

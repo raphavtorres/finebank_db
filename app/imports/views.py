@@ -54,8 +54,7 @@ from app.serializers import (
     CardGetSerializer,
     CardPostPatchSerializer,
 
-    TransactionGetSerializer,
-    TransactionPostPatchSerializer,
+    TransactionSerializer,
 
     BankStatementSerializer,
 )
@@ -71,6 +70,8 @@ from app.permissions import (
 )
 
 from app.filters import (
-    user_info_filter,
-    account_info_filter,
+    filter_by_user,
+    filter_by_account,
+    filter_by_loan,
+    filter_by_card
 )
