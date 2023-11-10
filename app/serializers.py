@@ -275,19 +275,6 @@ class CardPostPatchSerializer(serializers.ModelSerializer):
 
 
 # TRANSACTION
-# class TransactionGetSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Transaction
-#         fields = [
-#             'id',
-#             'card',
-#             'id_receiver',
-#             'amount',
-#             'transaction_type',
-#             'timestamp'
-#         ]
-
 class TransactionSerializer(serializers.ModelSerializer):
 
     class Meta:
