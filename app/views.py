@@ -349,7 +349,7 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [CustomerGetPostPermission]
 
     def get_queryset(self):
-        return filter_by_card(self)
+        return filter_by_account(self, Card)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
