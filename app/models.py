@@ -230,7 +230,7 @@ class Loan(Base):
                                                   validators=[
                                                       MaxValueValidator(10)
                                                   ])
-    request_date = models.DateTimeField(auto_now_add=True)
+    request_date = models.DateField(auto_now_add=True)
     approval_date = models.DateField()
     is_approved = models.BooleanField(default=False)
     observation = models.TextField(max_length=300)
