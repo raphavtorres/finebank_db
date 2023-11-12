@@ -222,6 +222,7 @@ class LoanPostPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
         fields = [
+            'id',
             'account',
             'amount_request',
             'interest_rate',
