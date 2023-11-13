@@ -282,7 +282,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = [
             'id_card',
-            'id_receiver',
+            'acc_receiver',
             'amount',
             'transaction_type'
         ]

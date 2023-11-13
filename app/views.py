@@ -390,13 +390,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         # getting receiver account
-        id_receiver = request.data.get('id_receiver')
-        receiver = get_object_or_404(Account, pk=id_receiver)
+        acc_receiver = request.data.get('acc_receiver')
+        receiver = get_object_or_404(Account, number=acc_receiver)
 
         # getting transaction info from serializer
         id_card = request.data.get('id_card')
         card = get_object_or_404(Card, pk=id_card)
-        amount = request.data.get('amount')
+        amount = int(request.data.get('amount'))
         transaction_type = request.data.get('transaction_type')
 
         # getting account instance from card fk
