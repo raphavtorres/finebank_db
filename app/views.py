@@ -197,7 +197,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
         investment = get_object_or_404(Investment, pk=id_investment)
 
         # getting info for AccountInvestment based on the Investment received
-        account = request.data.get('account')
+        account = request.data.get('id_account')
         account_instance = get_object_or_404(Account, pk=account)
 
         if account_instance.balance >= investment.contribution:
