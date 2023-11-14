@@ -2,9 +2,7 @@ import requests
 import os
 
 
-# BASE_URL = 'http://127.0.0.1:8000/api/v1/'
-BASE_URL = 'http://192.168.1.10:8000/api/v1/'
-# BASE_URL = 'http://192.168.155.1:8000/api/v1/'
+BASE_URL = 'http://192.168.56.1:8000/api/v1/'
 
 natural_people_url = os.path.join(BASE_URL, 'natural-people/')
 legal_people_url = os.path.join(BASE_URL, 'legal-people/')
@@ -45,6 +43,7 @@ def create_natural_person(cpf, password, name, birthdate, rg, social_name):
                                  "rg": rg,
                                  "social_name": social_name
                              })
+    print(response.json())
     return response.json()
 
 
@@ -59,6 +58,7 @@ def create_legal_person(cnpj, password, fantasy_name, establishment_date, im, ie
                                  "ie": ie,
                                  "legal_nature": legal_nature
                              })
+    print(response.json())
     return response.json()
 
 
@@ -68,6 +68,7 @@ def create_email(headers, email, customer):
                                  "email": email,
                                  "customer": customer
                              })
+    print(response.json())
     return response.json()
 
 
@@ -79,6 +80,7 @@ def create_phone(headers, phone, country_code, prefix_number, customer):
                                  "prefix_number": prefix_number,
                                  "customer": customer
                              })
+    print(response.json())
     return response.json()
 
 
@@ -93,15 +95,16 @@ def create_address(headers, neighborhood, street, number, city, state, cep, cust
                                  "cep": cep,
                                  "customer": customer
                              })
+    print(response.json())
     return response.json()
 
 
-def create_account(headers, acc_type, balance):
+def create_account(headers, acc_type):
     response = requests.post(accounts_url, headers=headers,
                              json={
-                                 "acc_type": acc_type,
-                                 "balance": balance
+                                 "acc_type": acc_type
                              })
+    print(response.json())
     return response.json()
 
 
@@ -115,15 +118,17 @@ def create_investment(headers, investment_type, contribution, admin_fee, period,
                                  "risc_rate": risc_rate,
                                  "profitability": profitability
                              })
+    print(response.json())
     return response.json()
 
 
-def create_account_investment(headers, id_investment, account):
+def create_account_investment(headers, id_investment, id_account):
     response = requests.post(account_investments_url, headers=headers,
                              json={
                                  "id_investment": id_investment,
-                                 "account": account
+                                 "id_account": id_account
                              })
+    print(response.json())
     return response.json()
 
 
@@ -137,6 +142,7 @@ def create_loan(headers, account, amount_request, interest_rate, is_payout, inst
                                  "installment_amount": installment_amount,
                                  "observation": observation
                              })
+    print(response.json())
     return response.json()
 
 
@@ -145,36 +151,38 @@ def create_card(headers, account):
                              json={
                                  "account": account
                              })
+    print(response.json())
     return response.json()
 
 
-def create_transaction(headers, id_card, id_receiver, amount, transaction_type):
+def create_transaction(headers, card, receiver_acc_number, amount, transaction_type):
     response = requests.post(transactions_url, headers=headers,
                              json={
-                                 "id_card": id_card,
-                                 "id_receiver": id_receiver,
+                                 "card": card,
+                                 "receiver_acc_number": receiver_acc_number,
                                  "amount": amount,
                                  "transaction_type": transaction_type
                              })
+    print(response.json())
     return response.json()
 
 
 def main():
     # CREATE NATURAL PERSON
-    print(create_natural_person("92154845070", "test@test",
-          "Person1", "2004-03-15", "380959021", social_name=""))
-    print(create_natural_person("96731438030", "test@test",
-          "Person2", "2003-12-02", "147879619", social_name=""))
-    print(create_natural_person("48090331041", "test@test",
-          "Person3", "1980-12-04", "306126618", social_name=""))
+    create_natural_person("92154845070", "test@test",
+                          "Person1", "2004-03-15", "380959021", social_name="")
+    create_natural_person("96731438030", "test@test",
+                          "Person2", "2003-12-02", "147879619", social_name="")
+    create_natural_person("48090331041", "test@test",
+                          "Person3", "1980-12-04", "306126618", social_name="")
 
     # CREATE LEGAL PERSON
-    print(create_legal_person("72305148000145", "test@test", "Company1",
-          "2000-12-10", im="33333", ie="925113970461", legal_nature="Comp1Name"))
-    print(create_legal_person("03673451000188", "test@test", "Company2",
-          "2003-12-02", im="22222", ie="024719352149", legal_nature="Comp2Name"))
-    print(create_legal_person("18716263000167", "test@test", "Company3",
-          "1980-12-04", im="11111", ie="451925422835", legal_nature="Comp3Name"))
+    create_legal_person("72305148000145", "test@test", "Company1",
+                        "2000-12-10", im="33333", ie="925113970461", legal_nature="Comp1Name")
+    create_legal_person("03673451000188", "test@test", "Company2",
+                        "2003-12-02", im="22222", ie="024719352149", legal_nature="Comp2Name")
+    create_legal_person("18716263000167", "test@test", "Company3",
+                        "1980-12-04", im="11111", ie="451925422835", legal_nature="Comp3Name")
 
     # CREATING HEADER
     super_user_header = create_header(123, "123")
@@ -183,60 +191,60 @@ def main():
     header_legal = create_header(72305148000145, "test@test")
 
     # CREATE EMAIL
-    print(create_email(header_natural_1, "person1@gmail.com", "92154845070"))
-    print(create_email(header_natural_2, "person1second@gmail.com", "92154845070"))
-    print(create_email(header_legal, "company1@gmail.com", "72305148000145"))
+    create_email(header_natural_1, "person1@gmail.com", "92154845070")
+    create_email(header_natural_2, "person1second@gmail.com", "92154845070")
+    create_email(header_legal, "company1@gmail.com", "72305148000145")
 
     # CREATE PHONE
-    print(create_phone(header_natural_1, "31212867", country_code="55",
-          prefix_number="81", customer="92154845070"))
-    print(create_phone(header_natural_2, "23766213", country_code="55",
-          prefix_number="63", customer="92154845070"))
-    print(create_phone(header_legal, "38203406", country_code="55",
-          prefix_number="84", customer="72305148000145"))
+    create_phone(header_natural_1, "31212867", country_code="55",
+                 prefix_number="81", customer="92154845070")
+    create_phone(header_natural_2, "23766213", country_code="55",
+                 prefix_number="63", customer="92154845070")
+    create_phone(header_legal, "38203406", country_code="55",
+                 prefix_number="84", customer="72305148000145")
 
     # CREATE ADDRESS
-    print(create_address(header_natural_1, "Planalto", "Treze", "769",
-          "Maceió", "Alagoas", "69121410", "92154845070"))
-    print(create_address(header_natural_2, "Centro", "Duque de Caxias", "28",
-          "Teófilo Otoni", "Minas Gerais", "09769184", "03673451000188"))
-    print(create_address(header_legal, "São José", "Bahia", "4225",
-          "Bacabal", "Maranhão", "69387595", "48090331041"))
+    create_address(header_natural_1, "Planalto", "Treze", "769",
+                   "Maceió", "Alagoas", "69121410", "92154845070")
+    create_address(header_natural_2, "Centro", "Duque de Caxias", "28",
+                   "Teófilo Otoni", "Minas Gerais", "09769184", "03673451000188")
+    create_address(header_legal, "São José", "Bahia", "4225",
+                   "Bacabal", "Maranhão", "69387595", "48090331041")
 
     # CREATE ACCOUNT - need user authenticated to make relation
-    print(create_account(header_legal, "checking", balance=2000.00))
-    print(create_account(header_natural_1, "savings", balance=5000.00))
+    account1 = create_account(header_legal, "checking")
+    account2 = create_account(header_natural_1, "savings")
 
     # CREATE INVESTMENT
-    print(create_investment(super_user_header, "Tesouro Direto", 350.00, admin_fee=0.01,
-          period="2026-01-01", risc_rate="Baixo", profitability=0.10))
-    print(create_investment(super_user_header, "CDB", 200.00, admin_fee=0.02,
-          period="2027-01-01", risc_rate="Médio", profitability=0.11))
-    print(create_investment(super_user_header, "LCI", 540.00, admin_fee=0.012,
-          period="2028-01-01", risc_rate="Alto", profitability=0.12))
+    create_investment(super_user_header, "Tesouro Direto", 350.00, admin_fee=0.01,
+                      period="2026-01-01", risc_rate="Baixo", profitability=0.10)
+    create_investment(super_user_header, "CDB", 200.00, admin_fee=0.02,
+                      period="2027-01-01", risc_rate="Médio", profitability=0.11)
+    create_investment(super_user_header, "LCI", 540.00, admin_fee=0.012,
+                      period="2028-01-01", risc_rate="Alto", profitability=0.12)
 
     # CREATE ACCOUNT INVESTMENT
-    print(create_account_investment(
-        header_natural_1, id_investment=1, account=2))
-    print(create_account_investment(
-        header_natural_1, id_investment=3, account=2))
+    create_account_investment(
+        header_natural_1, id_investment=1, id_account=2)
+    create_account_investment(
+        header_natural_1, id_investment=3, id_account=2)
 
     # CREATE LOAN
-    print(create_loan(header_natural_1, 1, 700, interest_rate=0.05,
-          is_payout=False, installment_amount=3, observation="comprar um celular"))
-    print(create_loan(header_legal, 2, 2000, interest_rate=0.03,
-          is_payout=False, installment_amount=2, observation="contratar funcionário"))
+    create_loan(header_natural_1, 1, 700, interest_rate=0.05,
+                is_payout=False, installment_amount=3, observation="comprar um celular")
+    create_loan(header_legal, 2, 2000, interest_rate=0.03,
+                is_payout=False, installment_amount=2, observation="contratar funcionário")
 
     # CREATE CARD
-    print(create_card(header_natural_1, account=1))
-    print(create_card(header_natural_1, account=2))
-    print(create_card(header_legal, account=2))
+    create_card(header_natural_1, account=1)
+    create_card(header_natural_1, account=2)
+    create_card(header_legal, account=2)
 
     # CREATE TRANSACTION
-    print(create_transaction(header_natural_1, id_card=2, id_receiver=1,
-          amount=30, transaction_type="Credit"))
-    print(create_transaction(header_natural_1, id_card=2, id_receiver=1,
-          amount=2000, transaction_type="Debit"))
+    create_transaction(header_natural_1, card=2, receiver_acc_number=account1['number'],
+                       amount=30, transaction_type="Credit")
+    create_transaction(header_natural_1, card=2, receiver_acc_number=account1['number'],
+                       amount=2000, transaction_type="Debit")
 
 
 if __name__ == '__main__':

@@ -170,7 +170,11 @@ class AccountViewSet(viewsets.ModelViewSet):
             is_active=True
         )
 
-        return Response({'status': 'Account Succesfully Created'}, status=status.HTTP_201_CREATED)
+        serializer = AccountGetSerializer(account)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # return Response({'status': 'Account Succesfully Created'}, status=status.HTTP_201_CREATED)
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
@@ -244,10 +248,10 @@ class LoanViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         # Getting loan information
-        amount_request = request.data.get('amount_request')
-        interest_rate = request.data.get('interest_rate')
-        is_payout = request.data.get('is_payout')
-        installment_amount = request.data.get('installment_amount')
+        amount_request = Decimal(request.data.get('amount_request'))
+        interest_rate = random.choice([0.02, 0.03, 0.04, 0.05])
+        is_payout = False
+        installment_amount = int(request.data.get('installment_amount'))
         approval_date = datetime.now().strftime('%Y-%m-%d')
         observation = request.data.get('observation')
 
@@ -390,11 +394,11 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         # getting receiver account
-        acc_receiver = request.data.get('acc_receiver')
-        receiver = get_object_or_404(Account, number=acc_receiver)
+        receiver_acc_number = request.data.get('receiver_acc_number')
+        receiver = get_object_or_404(Account, number=receiver_acc_number)
 
         # getting transaction info from serializer
-        id_card = request.data.get('id_card')
+        id_card = request.data.get('card')
         card = get_object_or_404(Card, pk=id_card)
         amount = int(request.data.get('amount'))
         transaction_type = request.data.get('transaction_type')
@@ -406,7 +410,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
         if account.balance > amount:
 
             # creating transaction
-            Transaction.objects.create(
+            transaction = Transaction.objects.create(
                 card=card,
                 amount=amount,
                 receiver_acc_number=receiver,
@@ -417,8 +421,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
             create_bankstatement(account, 'Sent', 'Transaction', amount)
             # saving transaction in BankStatement to Receiver
             create_bankstatement(receiver, 'Received', 'Transaction', amount)
+            serializer = TransactionSerializer(transaction)
 
-            return Response({'status': 'Transaction Succesfully Created'}, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # return Response({'status': 'Transaction Succesfully Created'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'Not enough balance to make the transaction'}, status=status.HTTP_403_FORBIDDEN)
 
 

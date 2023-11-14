@@ -281,8 +281,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
-            'id_card',
-            'acc_receiver',
+            'card',
+            'receiver_acc_number',
             'amount',
             'transaction_type'
         ]
