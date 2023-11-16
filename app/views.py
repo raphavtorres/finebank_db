@@ -366,6 +366,10 @@ class CardViewSet(viewsets.ModelViewSet):
         account = request.data.get('account')
         account_instance = get_object_or_404(Account, pk=account)
 
+        cardsList = [*account_instance.cards.all()]
+        if len(cardsList) > 3:
+            return Response({'status': 'You reached the max amount of cards'}, status=status.HTTP_403_FORBIDDEN)
+
         if account_instance.credit_limit > 500:
             # card parameters
             card_number = get_random_number(16)

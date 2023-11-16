@@ -2,7 +2,7 @@ import requests
 import os
 
 
-BASE_URL = 'http://192.168.1.10:8000/api/v1/'
+BASE_URL = 'http://192.168.56.1:8000/api/v1/'
 
 natural_people_url = os.path.join(BASE_URL, 'natural-people/')
 legal_people_url = os.path.join(BASE_URL, 'legal-people/')
