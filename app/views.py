@@ -398,22 +398,22 @@ class TransactionViewSet(viewsets.ModelViewSet):
         receiver = get_object_or_404(Account, number=receiver_acc_number)
 
         # getting transaction info from serializer
-        id_card = request.data.get('card')
-        card = get_object_or_404(Card, pk=id_card)
+        card = request.data.get('card')
+        card_instance = get_object_or_404(Card, pk=card)
         amount = int(request.data.get('amount'))
         transaction_type = request.data.get('transaction_type')
 
         # getting account instance from card fk
-        account = card.account
+        account = card_instance.account
 
         # testing user balance to accept transaction
         if account.balance > amount:
 
             # creating transaction
             transaction = Transaction.objects.create(
-                card=card,
+                card=card_instance,
                 amount=amount,
-                receiver_acc_number=receiver,
+                receiver_acc_number=receiver_acc_number,
                 transaction_type=transaction_type
             )
 
@@ -424,7 +424,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
             serializer = TransactionSerializer(transaction)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            # return Response({'status': 'Transaction Succesfully Created'}, status=status.HTTP_201_CREATED)
         return Response({'status': 'Not enough balance to make the transaction'}, status=status.HTTP_403_FORBIDDEN)
 
 
