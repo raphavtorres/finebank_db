@@ -260,7 +260,8 @@ class Installment(Base):
 
 
 class Card(Base):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(
+        Account, related_name="cards", on_delete=models.CASCADE)
     number = models.CharField(max_length=16)
     verification_code = models.CharField(max_length=3)
     flag = models.CharField(max_length=20)
