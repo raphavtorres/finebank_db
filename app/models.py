@@ -113,7 +113,7 @@ class Email(Base):
 
 class Phone(Base):
     customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    phone = models.CharField(max_length=8, unique=True)
+    phone = models.CharField(max_length=9, unique=True)
     country_code = models.CharField(max_length=3)
     prefix_number = models.CharField(max_length=3)
 
