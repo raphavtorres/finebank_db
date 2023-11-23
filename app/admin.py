@@ -8,7 +8,7 @@ class CustomerAdmin(UserAdmin):
     model = Customer
     list_display = ('register_number', 'username', 'is_staff')
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('register_number', 'password', 'picture')}),
         # ('Personal Information', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_active', 'is_staff',
                                     'is_superuser', 'groups', 'user_permissions')}),

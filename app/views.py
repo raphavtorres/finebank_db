@@ -28,7 +28,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
             customer = get_user_model().objects.create_user(
                 register_number=int(cpf),
                 password=password,
-                picture='picture_path'
+                # picture='picture_path'
             )
 
             # creating user type naturalperson
@@ -75,7 +75,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
             customer = get_user_model().objects.create_user(
                 register_number=int(cnpj),
                 password=password,
-                picture='picture_path'
+                # picture='picture_path'
             )
 
             # creating user type legalperson

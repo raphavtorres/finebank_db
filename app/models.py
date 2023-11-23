@@ -52,7 +52,7 @@ class Customer(AbstractUser):
         unique=True,
         primary_key=True
     )
-    picture = models.CharField(max_length=255)
+    picture = models.ImageField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ['first_name', 'last_name']
