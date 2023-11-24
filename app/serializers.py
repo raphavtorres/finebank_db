@@ -1,6 +1,15 @@
 from .imports.serializers import *
 
 
+# CUSTOMER
+class CustomerSerializer(serializers.ModelField):
+    class Meta:
+        model = Customer
+        fields = [
+            'picture'
+        ]
+
+
 # ACCOUNT
 # GET ACCOUNT INFO
 class AccountGetSerializer(serializers.ModelSerializer):

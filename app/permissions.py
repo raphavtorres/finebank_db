@@ -18,6 +18,11 @@ class CustomerPostPermission(permissions.BasePermission):
         return get_customer_permission(request, 'POST')
 
 
+class CustomerPatchPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return get_customer_permission(request, 'PATCH')
+
+
 class CustomerGetPostPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         return get_customer_permission(request, 'GET POST')

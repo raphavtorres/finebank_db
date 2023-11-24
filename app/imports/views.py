@@ -12,6 +12,7 @@ from decimal import Decimal
 
 
 from app.models import (
+    Customer,
     NaturalPerson,
     LegalPerson,
     Email,
@@ -28,6 +29,7 @@ from app.models import (
 )
 
 from app.serializers import (
+    CustomerSerializer,
     NaturalPersonGetSerializer,
     NaturalPersonPostPatchSerializer,
 
@@ -62,6 +64,7 @@ from app.serializers import (
 from app.permissions import (
     CustomerGetPermission,
     CustomerPostPermission,
+    CustomerPatchPermission,
     CustomerGetPostPermission,
     CustomerGetPostPatchPermission,
     SuperUserPermission,

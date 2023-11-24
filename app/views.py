@@ -1,6 +1,13 @@
 from .imports.views import *
 
 
+# CUSTOMER
+class CustomerViewSet(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    permission_classes = [CustomerPatchPermission]
+    serializer_class = CustomerSerializer
+
+
 # NATURAL PERSON
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []

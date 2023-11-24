@@ -3,6 +3,7 @@ from .imports.url import *
 
 router = SimpleRouter()
 
+router.register('profile-picture', CustomerViewSet, basename='profile-picture')
 router.register('natural-people', NaturalPersonViewSet,
                 basename='natural-people')
 router.register('legal-people', LegalPersonViewSet, basename='legal-people')

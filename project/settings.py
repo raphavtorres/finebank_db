@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_extensions',
     'rest_framework',
+    'imagekit',
     # 'rest_framework.authtoken'
 
     'app',
