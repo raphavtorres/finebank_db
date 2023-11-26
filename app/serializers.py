@@ -2,7 +2,7 @@ from .imports.serializers import *
 
 
 # CUSTOMER
-class CustomerSerializer(serializers.ModelField):
+class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = [

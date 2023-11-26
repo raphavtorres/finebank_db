@@ -3,9 +3,12 @@ from .imports.views import *
 
 # CUSTOMER
 class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all()
-    permission_classes = [CustomerPatchPermission]
+    # queryset = Customer.objects.all()
+    permission_classes = [CustomerGetPatchPermission]
     serializer_class = CustomerSerializer
+
+    def get_queryset(self):
+        return filter_by_customer(Customer, self.request.user)
 
 
 # NATURAL PERSON
@@ -143,7 +146,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         acc_number = get_random_number(8)
         agency = '4242'
         acc_type = request.data.get('acc_type')  # POUPANÇA / CORRENTE
-        credit_limit = random.choice([200, 400, 600, 800])
+        credit_limit = random.choice([2000, 2500, 3200, 4300])
         balance = random.choice([500, 1000, 2000, 3000])
         customer = self.request.user.pk
 
@@ -377,7 +380,7 @@ class CardViewSet(viewsets.ModelViewSet):
         if len(cardsList) > 3:
             return Response({'status': 'You reached the max amount of cards'}, status=status.HTTP_403_FORBIDDEN)
 
-        if account_instance.credit_limit > 500:
+        if account_instance.balance >= 500:
             # card parameters
             card_number = get_random_number(16)
             verification_code = get_random_number(3)

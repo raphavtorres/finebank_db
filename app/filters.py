@@ -2,6 +2,18 @@ from django.shortcuts import get_object_or_404
 from app.models import Account, Loan, Installment, Card
 
 
+def filter_by_customer(model, customer):
+    """
+    Returns the queryset with info about the customer
+    Or returns all if superuser
+    """
+    queryset = model.objects.all()
+
+    if customer.is_authenticated and not customer.is_superuser:
+        queryset = queryset.filter(register_number=customer.pk)
+    return queryset
+
+
 def filter_by_user(model, customer):
     """
     Returns the queryset with info about the user

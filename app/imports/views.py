@@ -65,6 +65,7 @@ from app.permissions import (
     CustomerGetPermission,
     CustomerPostPermission,
     CustomerPatchPermission,
+    CustomerGetPatchPermission,
     CustomerGetPostPermission,
     CustomerGetPostPatchPermission,
     SuperUserPermission,
@@ -73,6 +74,7 @@ from app.permissions import (
 )
 
 from app.filters import (
+    filter_by_customer,
     filter_by_user,
     filter_by_account,
     filter_by_loan,
