@@ -64,8 +64,17 @@ INSTALLED_APPS = [
 
     # Djoser auth
     'djoser',
-
+    'axes',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # AxesStandaloneBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesStandaloneBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 
 MIDDLEWARE = [
     # API
@@ -78,6 +87,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -189,6 +200,10 @@ DJOSER = {
         'user_list': [CustomerPostPermission],
     },
 }
+
+# AXES CONFIGS
+AXES_FAILURE_LIMIT = 3
+AXES_COOLOFF_TIME = 1/60
 
 # JWT
 SIMPLE_JWT = {
