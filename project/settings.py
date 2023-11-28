@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -88,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
 
@@ -204,7 +207,7 @@ DJOSER = {
 # AXES CONFIGS
 AXES_FAILURE_LIMIT = 3
 AXES_RESET_ON_SUCCESS = True
-AXES_COOLOFF_TIME = 0.016
+AXES_COOLOFF_TIME = timedelta(minutes=1)
 
 # JWT
 SIMPLE_JWT = {
