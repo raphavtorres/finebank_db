@@ -53,13 +53,21 @@ def filter_by_loan(obj):
 
     customer = obj.request.user
     loan = obj.request.query_params.get('loan')
+    print("loan", loan)
 
     if loan:
         loan_instance = get_object_or_404(Loan, pk=loan)
+        print("loan_instance: ", loan_instance)
+        print("loan_instance.account: ", loan_instance.account)
 
         if (customer.is_authenticated and customer.is_superuser) or (customer in loan_instance.account.customer.all()):
-            queryset = Installment.objects.all()
-            queryset = queryset.filter(loan=loan_instance)
+            print("loan_instance.account.customer.all(): ",
+                  loan_instance.account.customer.all())
+            queryset = loan_instance.installments.all()
+            # queryset = Installment.objects.all()
+            # print("queryset1: ", queryset)
+            # queryset = queryset.filter(loan=loan_instance.pk)
+            print("queryset2: ", queryset)
 
     return queryset
 

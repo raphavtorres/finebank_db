@@ -244,7 +244,8 @@ class Loan(Base):
 
 
 class Installment(Base):
-    loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
+    loan = models.ForeignKey(
+        Loan, on_delete=models.CASCADE, related_name="installments")
     number = models.CharField(max_length=8)
     payment_amount = models.DecimalField(max_digits=7, decimal_places=2)
     payment_date = models.DateField(null=True, blank=True)

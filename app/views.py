@@ -269,24 +269,26 @@ class LoanViewSet(viewsets.ModelViewSet):
         account_instance = get_object_or_404(Account, pk=account)
 
         def create_loan(is_approved):
-            loan = Loan.objects.create(
-                account=account_instance,
-                amount_request=amount_request,
-                interest_rate=interest_rate,
-                is_payout=is_payout,
-                installment_amount=installment_amount,
-                approval_date=approval_date,
-                is_approved=is_approved,
-                observation=observation
-            )
-            return loan
+            if is_approved:
+                loan = Loan.objects.create(
+                    account=account_instance,
+                    amount_request=amount_request,
+                    interest_rate=interest_rate,
+                    is_payout=is_payout,
+                    installment_amount=installment_amount,
+                    approval_date=approval_date,
+                    is_approved=is_approved,
+                    observation=observation
+                )
+                print("CREATE LOAN", loan)
+                return loan
 
         # Getting installment information
         number = get_random_number(8)
-        payment_amount = round((amount_request / installment_amount), 2)
+        # payment_amount = round((amount_request / installment_amount), 2)
 
         # Approved
-        if payment_amount < account_instance.credit_limit * 4:
+        if amount_request < account_instance.credit_limit * 4:
             # adding to BankStatement table
             create_bankstatement(
                 account_instance, 'Received', 'Loan', amount_request)
@@ -300,13 +302,12 @@ class LoanViewSet(viewsets.ModelViewSet):
                 Installment.objects.create(
                     loan=loan,
                     number=number,
-                    payment_amount=payment_amount,
+                    payment_amount=amount_request,
                     expiration_date=expiration_date,
                     is_paid=False
                 )
 
             return Response({'status': 'Loan Succesfully Created'}, status=status.HTTP_201_CREATED)
-
         # Rejected
         create_loan(False)
         return Response({'status': 'Not eligible to receive the loan'}, status=status.HTTP_403_FORBIDDEN)

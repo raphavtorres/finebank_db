@@ -221,6 +221,7 @@ class LoanGetSerializer(serializers.ModelSerializer):
             'installment_amount',
             'request_date',
             'approval_date',
+            'is_approved',
             'observation',
             'installments'
         ]
