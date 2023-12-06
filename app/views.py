@@ -1,6 +1,11 @@
 from .imports.views import *
 
 
+class BlockedViewSet(viewsets.GenericViewSet):
+    def list(self, request, *args, **kwargs):
+        return Response({'status': 'Too Many Requests'}, status=status.HTTP_429_TOO_MANY_REQUESTS)
+
+
 # CUSTOMER
 class CustomerViewSet(viewsets.ModelViewSet):
     # queryset = Customer.objects.all()
@@ -422,6 +427,20 @@ class TransactionViewSet(viewsets.ModelViewSet):
         account = card_instance.account
 
         # testing user balance to accept transaction
+        if transaction_type == "Credit":
+            if account.credit_limit > amount:
+                print(account.credit_limit > amount)
+                card_statement = CardStatement.objects.create(
+                    card=card_instance,
+                    amount=amount,
+                    account_balance=account.balance
+                )
+                serializer = CardStatementSerializer(card_statement)
+                create_bankstatement(receiver, 'Received',
+                                     'Transaction', amount)
+
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'status': 'Not enough credit limit to make the transaction'}, status=status.HTTP_403_FORBIDDEN)
         if account.balance > amount:
 
             # creating transaction

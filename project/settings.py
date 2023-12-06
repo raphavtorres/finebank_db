@@ -91,7 +91,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'axes.middleware.AxesMiddleware',
+    'axes.middleware.AxesMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -193,8 +193,6 @@ REST_FRAMEWORK = {
         'anon': '100/minute',  # second, day, month, year
         'user': '100/minute'
     },
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 2,
 }
 
 # DJOSER CONFIGS
@@ -205,9 +203,14 @@ DJOSER = {
 }
 
 # AXES CONFIGS
+AXES_ENABLED = True
 AXES_FAILURE_LIMIT = 3
 AXES_RESET_ON_SUCCESS = True
 AXES_COOLOFF_TIME = timedelta(minutes=1)
+AXES_HTTP_RESPONSE_CODE = 429
+AXES_LOCKOUT_URL = 'blocked'
+AXES_LOCKOUT_TEMPLATE = None
+
 
 # JWT
 SIMPLE_JWT = {

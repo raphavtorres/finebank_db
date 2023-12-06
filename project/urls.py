@@ -6,6 +6,8 @@ from django.conf import settings
 
 from app.urls import router
 
+from app.views import BlockedViewSet
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
@@ -13,7 +15,8 @@ urlpatterns = [
 
     # DJOSER
     path('api/v1/auth/', include('djoser.urls')),
-    path('api/v1/auth/', include('djoser.urls.jwt'))
+    path('api/v1/auth/', include('djoser.urls.jwt')),
+    path('blocked/', BlockedViewSet.as_view({'get': 'list'}), name='blocked')
 ]
 
 urlpatterns += static(settings.MEDIA_URL,

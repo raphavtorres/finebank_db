@@ -15,4 +15,5 @@ from app.models import (
     Card,
     Transaction,
     BankStatement,
+    CardStatement
 )

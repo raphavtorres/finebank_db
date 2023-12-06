@@ -313,3 +313,16 @@ class BankStatement(Base):
 
     def __str__(self):
         return f'{self.transaction_action}'
+
+
+class CardStatement(Base):
+    card = models.ForeignKey(Card, on_delete=models.CASCADE)
+    amount = models.FloatField()
+    account_balance = models.DecimalField(decimal_places=2, max_digits=9)
+
+    class Meta:
+        verbose_name = 'CardStatement'
+        verbose_name_plural = 'CardStatements'
+
+    def __str__(self):
+        return f'{self.amount}'

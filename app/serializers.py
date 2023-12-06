@@ -310,3 +310,15 @@ class BankStatementSerializer(serializers.ModelSerializer):
             'amount',
             'account_balance'
         ]
+
+
+# CARDSTATEMENT
+class CardStatementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CardStatement
+        fields = [
+            'card',
+            'amount',
+            'account_balance'
+        ]

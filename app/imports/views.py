@@ -26,6 +26,7 @@ from app.models import (
     Card,
     Transaction,
     BankStatement,
+    CardStatement
 )
 
 from app.serializers import (
@@ -59,6 +60,8 @@ from app.serializers import (
     TransactionSerializer,
 
     BankStatementSerializer,
+
+    CardStatementSerializer,
 )
 
 from app.permissions import (
