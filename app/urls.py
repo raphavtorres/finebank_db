@@ -20,6 +20,8 @@ router.register('cards', CardViewSet, basename='cards')
 router.register('transactions', TransactionViewSet, basename='transactions')
 router.register('bank-statement', BankStatementViewSet,
                 basename='bank-statement')
+router.register('card-statement', CardStatementViewSet,
+                basename='card-statement')
 
 
 urlpatterns = []

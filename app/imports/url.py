@@ -17,4 +17,5 @@ from app.views import (
     CardViewSet,
     TransactionViewSet,
     BankStatementViewSet,
+    CardStatementViewSet
 )

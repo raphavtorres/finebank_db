@@ -1,11 +1,6 @@
 from .imports.views import *
 
 
-class BlockedViewSet(viewsets.GenericViewSet):
-    def list(self, request, *args, **kwargs):
-        return Response({'status': 'Too Many Requests'}, status=status.HTTP_429_TOO_MANY_REQUESTS)
-
-
 # CUSTOMER
 class CustomerViewSet(viewsets.ModelViewSet):
     # queryset = Customer.objects.all()
@@ -468,6 +463,15 @@ class BankStatementViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return filter_by_account(self, BankStatement)
+
+
+class CardStatementViewSet(viewsets.ModelViewSet):
+    serializer_class = CardStatementSerializer
+
+    permission_classes = [CustomerGetPermission]
+
+    def get_queryset(self):
+        return filter_by_card(self, CardStatement)
 
 
 # Functions

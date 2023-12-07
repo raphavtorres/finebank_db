@@ -72,7 +72,7 @@ def filter_by_loan(obj):
     return queryset
 
 
-def filter_by_card(obj):
+def filter_by_card(obj, model):
     """
     Returns the queryset filtered by the account
     """
@@ -85,7 +85,7 @@ def filter_by_card(obj):
         card_instance = get_object_or_404(Card, pk=card)
 
         if (customer.is_authenticated and customer.is_superuser) or (customer in card_instance.account.customer.all()):
-            queryset = Card.objects.all()
+            queryset = model.objects.all()
             queryset = queryset.filter(card=card_instance)
 
     return queryset
